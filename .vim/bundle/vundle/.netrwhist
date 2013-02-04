@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/root/.vim'
+let g:netrw_dirhist_2='/root/.vim/bundle'
+let g:netrw_dirhist_3='/root/.vim/bundle/ri_vim'
+let g:netrw_dirhist_4='/root/.vim/bundle/ri_vim/screens'
+let g:netrw_dirhist_5='/root/.vim/bundle/ri_vim'
+let g:netrw_dirhist_6='/root/.vim/bundle/ri_vim/lib'
+let g:netrw_dirhist_7='/root/.vim/bundle/ri_vim'
+let g:netrw_dirhist_8='/root/.vim/bundle/ri_vim/bin'
+let g:netrw_dirhist_9='/root/.vim/bundle/ri_vim'

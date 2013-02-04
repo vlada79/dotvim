@@ -1,4 +1,4 @@
 dotvim
 ======
 
-vimrc
+Repository contains my vim configuration.

@@ -17,3 +17,6 @@ DSL
 validators
 validator
 RDBMSs
+reindex
+fulltext
+html

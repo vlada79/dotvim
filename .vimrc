@@ -20,11 +20,19 @@ Bundle 'duff/vim-bufonly'
 
 " Ruby powertools
 Bundle 'vim-ruby/vim-ruby'
-Bundle 'danchoi/ri.vim'
-Bundle 'ecomba/vim-ruby-refactoring'
 Bundle 'vim-scripts/UltiSnips'
 
+" Puppet
+Bundle 'rodjek/vim-puppet'
+
+" Coffee
+Bundle 'kchmck/vim-coffee-script'
+
+" JSON
+Bundle 'elzr/vim-json'
+
 " Git powertools
+Bundle 'tpope/vim-git'
 Bundle 'tpope/vim-fugitive'
 
 " Experimental
@@ -75,7 +83,7 @@ set statusline=%<%1*%t%*\ %20.30(%{&ff}\ %{&fenc}\ %{&ft}%)\ %2*%10.40(%h%w%m%)%
 
 set directory=/tmp
 set backupdir=/tmp
-set tags=~/shrm/tags
+set tags=~/shrm/sherman-scraper/coffeetags,~/shrm/tags
 
 set path=.,~/shrm/**/lib/**
 

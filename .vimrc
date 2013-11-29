@@ -46,6 +46,13 @@ Bundle 'vim-scripts/AnsiEsc.vim'
 Bundle 'ctrlp.vim'
 Bundle 'L9'
 Bundle 'FuzzyFinder'
+Bundle 'xolox/vim-misc'
+Bundle 'xolox/vim-notes'
+
+" Themes
+Bundle 'jellybeans.vim'
+Bundle 'Solarized'
+Bundle 'railscasts'
 
 "
 " Setup
@@ -154,3 +161,6 @@ autocmd!
 autocmd BufWritePost .vimrc :so $MYVIMRC
 augroup END
 
+if !has('gui_running')
+  colorscheme solarized
+end

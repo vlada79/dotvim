@@ -1,9 +1,2 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/root/shrm/vpm/puppet/modules/m_shrm_org/manifests'
-let g:netrw_dirhist_2='/root/shrm/sherman-scraper'
-let g:netrw_dirhist_3='/root/shrm/sherman-scraper/bin'
-let g:netrw_dirhist_4='/root/shrm/sherman-scraper'
-let g:netrw_dirhist_5='/root/shrm/sherman-scraper/lib'
-let g:netrw_dirhist_6='/root/shrm/sherman-scraper/data'
-let g:netrw_dirhist_7='/root/shrm/sherman-scraper/lib'
+let g:netrw_dirhist_cnt =0

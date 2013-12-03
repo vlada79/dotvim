@@ -20,7 +20,7 @@ Bundle 'duff/vim-bufonly'
 
 " Ruby powertools
 Bundle 'vim-ruby/vim-ruby'
-Bundle 'vim-scripts/UltiSnips'
+"Bundle 'vim-scripts/UltiSnips'
 
 " Puppet
 Bundle 'rodjek/vim-puppet'

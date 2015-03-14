@@ -13,14 +13,19 @@ Bundle 'marik/vundle'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-commentary'
-Bundle 'tsaleh/vim-matchit'
+"Bundle 'tsaleh/vim-matchit'
 Bundle 'godlygeek/tabular'
 Bundle 'majutsushi/tagbar'
 Bundle 'duff/vim-bufonly'
 
 " Ruby powertools
 Bundle 'vim-ruby/vim-ruby'
-"Bundle 'vim-scripts/UltiSnips'
+Bundle 'tpope/vim-bundler'
+Bundle 'noprompt/vim-yardoc'
+
+" Python
+Bundle 'klen/python-mode'
+Bundle 'glench/vim-jinja2-syntax'
 
 " Puppet
 Bundle 'rodjek/vim-puppet'
@@ -48,6 +53,7 @@ Bundle 'L9'
 Bundle 'FuzzyFinder'
 Bundle 'xolox/vim-misc'
 Bundle 'xolox/vim-notes'
+Bundle 'The-NERD-tree'
 
 " Themes
 Bundle 'jellybeans.vim'
@@ -91,6 +97,7 @@ set statusline=%<%1*%t%*\ %20.30(%{&ff}\ %{&fenc}\ %{&ft}%)\ %2*%10.40(%h%w%m%)%
 set directory=/tmp
 set backupdir=/tmp
 set tags=~/shrm/sherman-scraper/coffeetags,~/shrm/tags
+set tags+=~/rezon/hermes/tags
 
 set path=.,~/shrm/**/lib/**
 
@@ -121,6 +128,7 @@ set foldlevelstart=1
 
 " SHRM CMS project specifics
 nnoremap <silent> <F6> :TagbarToggle<CR>
+nnoremap <silent> <F12> :NERDTreeToggle<CR>
 nnoremap <F2> :cprev<CR>
 nnoremap <F3> :cnext<CR>
 nnoremap <F4> :cw<CR>
@@ -155,6 +163,9 @@ nnoremap <Leader>sp :call ShowLog('~/shrm/apollo/server.log')<CR>
 " nnoremap <silent> <S-Enter> :cp<cr>
 nnoremap <silent> <C-Enter> :e $MYVIMRC<cr>
 
+" CtrlP configuration
+let g:ctrlp_cmd = 'CtrlPMRUFiles'
+
 " Reload .vimrc after each save
 augroup VimRc
 autocmd!
@@ -164,3 +175,4 @@ augroup END
 if !has('gui_running')
   colorscheme solarized
 end
+

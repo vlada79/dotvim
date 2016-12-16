@@ -63,8 +63,8 @@ highlight Normal        gui=None guibg=#102320 ctermbg=234 guifg=#0EEE0E ctermfg
 highlight Question      gui=bold  guifg=#E4EE49 ctermfg=191 guibg=bg
 highlight Search        gui=NONE guibg=#602020 ctermbg=52 guifg=NONE
 highlight SpecialKey    guibg=bg guifg=#324262 ctermfg=238
-highlight StatusLine    gui=none guibg=#000000 ctermbg=0 guifg=#FFFFFF ctermfg=15
-highlight StatusLineNC  gui=none guibg=#101B1B ctermbg=234 guifg=#707070 ctermfg=242
+highlight StatusLine    gui=none cterm=none guibg=#000000 ctermbg=0 guifg=#FFFFFF ctermfg=15
+highlight StatusLineNC  gui=none cterm=none guibg=#101B1B ctermbg=234 guifg=#707070 ctermfg=242
 highlight Title         gui=none  guifg=#0E66FF ctermfg=27 guibg=bg
 highlight Visual        gui=none guibg=#000000 ctermbg=0
 "highlight Visual        gui=reverse guibg=#FFFFFF ctermbg=15 guifg=#E2B875 ctermfg=180
@@ -72,7 +72,7 @@ highlight VisualNOS     gui=bold,underline guifg=fg guibg=bg
 highlight WarningMsg    gui=bold guifg=#FF0303 ctermfg=9 guibg=bg
 highlight WildMenu      gui=bold guibg=#F7FF00 ctermbg=11 guifg=#000000 ctermfg=0
 
-highlight Comment       gui=italic guifg=#507080 ctermfg=60
+highlight Comment       gui=italic guifg=#507080 
 highlight Constant      guifg=#00DCDC ctermfg=44 guibg=bg
 highlight String        gui=None guifg=#005EEE ctermfg=27 guibg=bg
 highlight Number        gui=None guifg=#00FFFF ctermfg=14 guibg=bg
@@ -117,33 +117,33 @@ endif
 
 
 """ Console
-if v:version >= 700
-    highlight PMenu      cterm=bold ctermbg=DarkGreen ctermfg=Gray
-    highlight PMenuSel   cterm=bold ctermbg=Yellow ctermfg=Gray
-    highlight PMenuSbar  cterm=bold ctermbg=DarkGreen
-    highlight PMenuThumb cterm=bold ctermbg=Yellow
-    highlight SpellBad   ctermbg=Red
-    highlight SpellRare  ctermbg=Red
-    highlight SpellLocal ctermbg=Red
-    highlight SpellCap   ctermbg=Yellow
-endif
+" if v:version >= 700
+"     highlight PMenu      cterm=bold ctermbg=DarkGreen ctermfg=Gray
+"     highlight PMenuSel   cterm=bold ctermbg=Yellow ctermfg=Gray
+"     highlight PMenuSbar  cterm=bold ctermbg=DarkGreen
+"     highlight PMenuThumb cterm=bold ctermbg=Yellow
+"     highlight SpellBad   ctermbg=Red
+"     highlight SpellRare  ctermbg=Red
+"     highlight SpellLocal ctermbg=Red
+"     highlight SpellCap   ctermbg=Yellow
+" endif
 
-highlight Normal        ctermfg=Gray ctermbg=None
-highlight Search        ctermfg=Black ctermbg=Red cterm=NONE
-highlight Visual        cterm=reverse
-highlight Cursor        ctermfg=Black ctermbg=Green cterm=bold
-highlight Special       ctermfg=Brown
-highlight Comment       ctermfg=DarkGray
-highlight Statement     ctermfg=Yellow cterm=NONE
-highlight Type          cterm=NONE
-highlight Macro         ctermfg=DarkRed
-highlight Identifier    ctermfg=DarkYellow
-highlight Structure     ctermfg=DarkGreen
-highlight String        ctermfg=DarkCyan
+" highlight Normal        ctermfg=Gray ctermbg=None
+" highlight Search        ctermfg=Black ctermbg=Red cterm=NONE
+" highlight Visual        cterm=reverse
+" highlight Cursor        ctermfg=Black ctermbg=Green cterm=bold
+" highlight Special       ctermfg=Brown
+" highlight Comment       ctermfg=DarkGray
+" highlight Statement     ctermfg=Yellow cterm=NONE
+" highlight Type          cterm=NONE
+" highlight Macro         ctermfg=DarkRed
+" highlight Identifier    ctermfg=DarkYellow
+" highlight Structure     ctermfg=DarkGreen
+" highlight String        ctermfg=DarkCyan
 
 " Status line highlites
-highlight User1         gui=none guibg=#000000 ctermbg=0 guifg=#FFFF0E ctermfg=11
-highlight User2         gui=none guibg=#000000 ctermbg=0 guifg=#9A9A9A ctermfg=247
-highlight User3         gui=none guibg=#000000 ctermbg=0 guifg=#00FFFF ctermfg=14
+highlight User1         gui=none cterm=none guibg=#000000 ctermbg=0 guifg=#FFFF0E ctermfg=11
+highlight User2         gui=none cterm=none guibg=#000000 ctermbg=0 guifg=#9A9A9A ctermfg=247
+highlight User3         gui=none cterm=none guibg=#000000 ctermbg=0 guifg=#00FFFF ctermfg=14
 
 " vim: sw=4 ts=4 et

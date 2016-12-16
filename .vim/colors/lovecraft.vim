@@ -103,6 +103,7 @@ highlight Underlined    gui=underline guifg=honeydew4 guibg=bg
 highlight Ignore        guifg=#204050
 highlight Error         guifg=LightYellow  guibg=FireBrick
 highlight Todo          guifg=Cyan guibg=#507080
+
 if v:version >= 700
     highlight PMenu      gui=bold guibg=LightSkyBlue4 guifg=honeydew2
     highlight PMenuSel   gui=bold guibg=DarkGreen guifg=honeydew2
@@ -113,8 +114,6 @@ if v:version >= 700
     highlight SpellLocal gui=undercurl guisp=Orange
     highlight SpellCap   gui=undercurl guisp=Yellow
 endif
-
-
 
 """ Console
 if v:version >= 700
@@ -146,5 +145,6 @@ highlight String        ctermfg=DarkCyan
 highlight User1         gui=none guibg=black guifg=lightyellow
 highlight User2         gui=none guibg=black guifg=darkgray
 highlight User3         gui=none guibg=black guifg=cyan
+
 
 " vim: sw=4 ts=4 et

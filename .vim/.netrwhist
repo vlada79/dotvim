@@ -1,2 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =0
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='ftp://genesismud.org:1822//w/zilmop/'
+let g:netrw_dirhist_2='ftp://genesismud.org:1822//w/'
+let g:netrw_dirhist_3='ftp://genesismud.org:1822//w/zilmop/'
+let g:netrw_dirhist_4='/home/vlada'
+let g:netrw_dirhist_5='ftp://genesismud.org:1822//w/zilmop/'
+let g:netrw_dirhist_6='ftp://genesismud.org:1822//w/'
+let g:netrw_dirhist_7='ftp://genesismud.org:1822//w/zilmop/'
+let g:netrw_dirhist_8='/home/vlada'

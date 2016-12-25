@@ -1,0 +1,1182 @@
+#
+# Snippets for Genesis/LPC
+# ========================
+#
+# Rooms:
+#  - create_room
+#
+# Armours:
+#  - create_armour
+#  - create_magic_armour
+#  - create_wearable
+#
+# Weapons:
+#  - create_weapon
+#  - create_poison_weapon
+#  - create_magic_weapon
+#
+# Containers:
+#  - create_backpack
+#  - create_bag
+#  - create_chest
+#  - create_trapped_chest
+#  - herbal jar?
+# Rope:
+#  - create_rope
+#
+# Light sources:
+#  - create_torch
+#
+# Misc items:
+#  - create_food
+#  - create_drink
+#
+# Utilities:
+#  - qwrap
+
+
+
+#
+# Py helpers
+# {{{
+global !p
+import textwrap
+
+def qwrap(text, clean = False):
+  r = re.sub(r'[\t\s\r\n]+', ' ', text, flags=re.MULTILINE)
+  if clean: r = re.sub(r'["\'\s/*+]+', ' ', r)
+  r = r.strip()
+  r = textwrap.wrap(r, 60, initial_indent=" \"",
+					subsequent_indent="\t\t\t+ \"",
+					expand_tabs=False)
+  r = "\"\n".join(r)
+  if not clean and len(r) > 0 : r += "\\n"
+  r = r + "\"" if r != "" else "\"\""
+  return r
+
+def clean_description():
+  if snip.tabstop != 0 : return
+  r = re.compile(r'/\*-{|}-\*/')
+  indices = [ i for i, line in enumerate(snip.buffer) if r.search(line) ]
+  if len(indices) != 2 : return
+  [ s, e ] = indices
+  snip.buffer[s : e+1] = []
+endglobal
+# }}}
+
+#
+# File skeletons
+# {{{
+context "snip.line == 0 and len(snip.buffer) == 1"
+snippet "^room$" "Create a room (full file skeleton)" br
+...full skeleton...
+endsnippet
+# }}}
+
+#
+# Visual snippets
+# {{{
+snippet qwrap "Rewrap string or comment into wrapped string" i
+`!p snip.rv = qwrap(snip.v.text, True)`
+endsnippet
+#}}}
+
+#
+# Rooms
+# {{{
+snippet create_room "Create a room" b
+/*
+ * Function name: create_room
+ * Description	: $1
+ */
+public void
+create_room()
+{
+	set_short("${1:Short description}");
+	set_long("$2\n");
+	
+	add_item(({ $3 }), "$4\n");
+
+	add_prop(ROOM_I_INSIDE, ${5:0-1});
+	reset_room();
+}
+
+/*
+ * Function name: create_room
+ * Description	: setup room content
+ */
+public void
+reset_room()
+{
+	if (!${6})
+	{
+		$6 = clone_object("/std/object");
+		$6->move(this_object(), 1);
+	}
+
+	::reset_room();
+}
+$0
+endsnippet
+# }}}
+
+#
+# Armours and wearables
+# {{{
+post_jump "clean_description()"
+snippet create_armour "Create an armour" b
+/*
+ * Function name: create_armour
+ * Description	: $5, recoverable: ${7:(Yes/No)}
+ */
+void
+create_armour()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_ac(${9:0-40});
+	set_at(A_${10:BODY});
+
+	set_am(({ ${11:Impale:<3}, ${12:Slash:<3}, ${13:Bludgeon:<3} }));
+
+	set_likely_break(${14:0-20});
+
+	add_prop(OBJ_I_WEIGHT, ${15:F_WEIGHT_DEFAULT_ARMOUR($9, A_$10)});
+	add_prop(OBJ_I_VOLUME, ${16:F_WEIGHT_DEFAULT_ARMOUR($9, A_$10)/5});
+	add_prop(OBJ_I_VALUE, ${17:F_VALUE_ARMOUR(A_$10)});
+}
+${7/^([Yy]es)|(.*)$/(?1:
+\/*
+ * Function name\: query_recover
+ * Description	\: Save armour state
+ *\/
+void
+query_recover()
+{
+	return MASTER + "\:" + query_arm_recover();
+}
+
+\/*
+ * Function name\: init_recover
+ * Description	\: Restore armour state
+ *\/
+void
+init_recover(string arg)
+{
+	init_arm_recover(arg);
+}
+:)/}
+$0
+endsnippet
+
+snippet create_wearable "Create wearable item" b
+/*
+ * Function name: create_object
+ * Description	: $5, recoverable: ${7:(Yes/No)}
+ */
+public nomask void
+create_object()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/* 
+		Description: 
+					${8:Long description}
+	*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_slots(A_${9:HEAD});
+
+	set_layers(${10:2, layers it occupies});
+	set_looseness(${11:3, layers it can be worn on});
+
+	add_prop(OBJ_I_WEIGHT, ${12:light});
+	add_prop(OBJ_I_VOLUME, ${13:foldable});
+	add_prop(OBJ_I_VALUE,	${14:fairly inexpensive});
+}
+
+/*
+ * Description: We need to override leave_env() so that we can 
+ *		be sure to remove the $1 if it gets moved from 
+ *		the wearer while it is still worn.
+ */
+public void
+leave_env(object env, object to)
+{
+	::leave_env(env, to);
+
+	wearable_item_leave_env(env, to);
+}
+
+/*
+ * Description: We need to override appraise_object() so that we can 
+ *		be sure that the player can appraise it properly.
+ */
+void
+appraise_object(int num)
+{
+	::appraise_object(num);
+
+	appraise_wearable_item();
+}
+${7/^([Yy]es)|(.*)$/(?1:
+\/*
+ * Function name\: query_recover
+ * Description	\: Save armour state
+ *\/
+void
+query_recover()
+{
+	return MASTER + "\:";
+}
+:)/}
+$0
+endsnippet
+
+snippet create_magical_armour "Create magical armour" b
+/*
+ * Function name: create_armour
+ * Description	: $5, magical, recoverable: ${7:(Yes/No)}
+ */
+void
+create_armour()
+{
+	add_prop(OBJ_I_IS_MAGIC_ARMOUR, 1);
+
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	add_item(({ ${9:Detail} }), 
+			"${10:Detail to suggest magical nature of armour.}\n");
+
+	set_ac(${11:0-60});
+	set_at(A_${12:BODY});
+
+	set_am(({ ${13:Impale:<4}, ${14:Slash:<4}, ${15:Bludgeon:<4} }));
+
+	set_likely_break(${16:0-20});
+
+	add_prop(OBJ_I_WEIGHT, ${17:F_WEIGHT_DEFAULT_ARMOUR($11, A_$12)});
+	add_prop(OBJ_I_VOLUME, ${18:F_WEIGHT_DEFAULT_ARMOUR($11, A_$12)/5});
+	add_prop(OBJ_I_VALUE, ${19:F_VALUE_ARMOUR(A_$12)}*2 + 1000); 
+
+	set_af(this_object());
+
+	set_keep(1);
+${11/^([456][0-9])|(.*)$/(?1:
+	add_prop(OBJ_M_NO_BUY, 
+		"Merchant nervously declines to buy so valuable item.}");
+:)/}
+	// The 'form' of the magic and the degree of its expression.
+	add_prop(MAGIC_AM_MAGIC, ({ ${20:40}, "${21:enchantment}" }));
+
+	add_prop(MAGIC_AM_ID_INFO, ({
+	"${22:Identify 1 description. }", 10,		
+	"${23:Identify 2 description. }", 30,
+	"${24:Identify 3 description. }", 50}));
+
+	add_prop(OBJ_S_WIZINFO,
+		"${25:Wizard description, include all magical effects, spawn "+
+		"location and monsters that own this armour.}\n");
+}
+
+varargs mixed
+query_magic_protection(string prop, object protectee = previous_object())
+{
+	if (query_prop(OBJ_I_IS_MAGIC_ARMOUR) && (protectee == query_worn()))
+	{
+	if (prop == MAGIC_I_RES_${26:FIRE})
+		return ({ ${27:Strength(%):<40add/<75abs}, ${28:Additive:1/Absolute:0} }); 
+	else
+	{
+		return ::query_magic_protection(prop, protectee);
+	}
+}
+
+mixed
+wear(object ob)
+{
+	if (!query_prop(OBJ_I_IS_MAGIC_ARMOUR))
+		return 0;
+
+	if (wearer->resolve_task(TASK_${29:DIFFICULT}, ({TS_${30:DIS}, SS_${31:AWARENESS} })) < 0)
+	{
+		return "${32:Armour resists wearer, describe the effect.}\n";
+	}
+
+	wearer->add_magic_effect(this_object());
+
+	wearer->catch_tell("${33:Describe effect of wearing the armour.}\n");
+
+	return 0;
+}
+
+mixed
+remove(object ob)
+{
+	wearer->remove_magic_effect(this_object());
+
+	if (query_prop(OBJ_I_IS_MAGIC_ARMOUR))
+		wearer->catch_tell("${34:Describe effect of armour removal.}\n");
+
+	return 0;
+}
+
+
+public int
+disenchant_object(object disenchanter)
+{
+	remove_prop(OBJ_I_IS_MAGIC_ARMOUR);
+	remove_prop(MAGIC_AM_MAGIC);
+	add_prop(MAGIC_AM_ID_INFO, ({ 
+		"${35:This item once possessed some magical power, but it is " +
+		"now gone.}\n", 50 }));
+
+	add_prop(OBJ_I_VALUE, F_VALUE_ARMOUR($11)); 
+
+	remove_prop(OBJ_M_NO_BUY);
+
+	if (query_worn())
+		wearer->remove_magic_effect(this_object());
+
+	tell_room(environment(this_object()), 
+			  "${36:Describe effect of disenchanting for everyone in room.}\n");
+
+	remove_item(${9/^[^"]*("[^"]*").*$/$1/});
+	add_item(({ $9 }), 
+		"${36:Describe disenchanted magical armour detail.}\n");
+
+	return 1;
+}
+${7/^([Yy]es)|(.*)$/(?1:
+\/*
+ * Function name\: query_recover
+ * Description	\: Save armour state
+ *\/
+void
+query_recover()
+{
+	return MASTER + "\:" + query_arm_recover();
+}
+
+\/*
+ * Function name\: init_recover
+ * Description	\: Restore armour state
+ *\/
+void
+init_recover(string arg)
+{
+	init_arm_recover(arg);
+}
+:)/}
+$0
+endsnippet
+# }}}
+
+#
+# Weapons
+# {{{
+post_jump "clean_description()"
+snippet create_weapon "Create a weapon" b
+/*
+ * Function name: create_weapon
+ * Description	: $5, recoverable: ${7:(Yes/No)}
+ */
+void
+create_weapon()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_hit(${9:0-40});
+	set_pen(${10:0-40});
+
+	set_wt(W_${11:KNIFE});
+	set_dt(W_${12:SLASH} | W_${13:IMPALE});
+
+	set_hands(W_${14:ANYH});
+
+	add_prop(OBJ_I_WEIGHT, ${16:F_WEIGHT_DEFAULT_WEAPON($9, $10)});
+	add_prop(OBJ_I_VOLUME, ${17:F_WEIGHT_DEFAULT_WEAPON($9, $10)/5});
+	add_prop(OBJ_I_VALUE, ${18:F_VALUE_WEAPON($9, $10)});
+}
+${7/^([Yy]es)|(.*)$/(?1:
+\/*
+ * Function name\: query_recover
+ * Description	\: Save weapon state
+ *\/
+void
+query_recover()
+{
+	return MASTER + "\:" + query_wep_recover();
+}
+
+\/*
+ * Function name\: init_recover
+ * Description	\: Restore weapon state
+ *\/
+void
+init_recover(string arg)
+{
+	init_wep_recover(arg);
+}
+:)/}
+$0
+endsnippet
+
+post_jump "clean_description()"
+snippet create_bow "Create a bow" b
+/*
+ * Function name: create_bow
+ * Description	: $5 bow, recoverable: ${6:(Yes/No)}
+ */
+void
+create_bow()
+{
+	set_adj("${1:first adjective}");
+	add_adj("${2:second adjective}");
+
+	set_short("${3:$2 $1 bow}");
+	set_pshort("${4:$2 bows}");
+
+	/*-{
+		Description: 
+					${5:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[5])`);
+
+	set_hit(${7:0-40});
+	set_pen(${8:0-40});
+
+	add_prop(OBJ_I_WEIGHT, ${9:900});
+	add_prop(OBJ_I_VOLUME, ${10:3000});
+	add_prop(OBJ_I_VALUE, ${11:F_VALUE_WEAPON($9, $10)});
+}
+${7/^([Yy]es)|(.*)$/(?1:
+\/*
+ * Function name\: query_recover
+ * Description	\: Save weapon state
+ *\/
+void
+query_recover()
+{
+	return MASTER + "\:" + query_wep_recover();
+}
+
+\/*
+ * Function name\: init_recover
+ * Description	\: Restore weapon state
+ *\/
+void
+init_recover(string arg)
+{
+	init_wep_recover(arg);
+}
+:)/}
+$0
+endsnippet
+
+post_jump "clean_description()"
+snippet create_bow "Create an arrow" b
+/*
+ * Function name: create_arrow
+ * Description	: $1 $2 arrow, recoverable: ${6:(Yes/No)}
+ */
+void
+create_arrow()
+{
+	set_adj("${1:first adjective}");
+	add_adj("${2:second adjective}");
+
+    set_projectile_id("${3:$1_$2_arrow}");
+
+	/*-{
+		Description: 
+					${5:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[5])`);
+
+	set_hit(${7:0-40});
+	set_pen(${8:0-40});
+}
+
+/*
+ * Function name: get_projectile_long
+ * Description	: detailed arrow description
+ */
+string
+get_projectile_long(string str, object for_obj, int num)
+{
+    return ${9:((num == 1) ? "This arrow is" : "These arrows are") + 
+      " obviously of good making. Well balanced, straight and with " + 
+      "fins made from feathers that gleam in a spectrum of colours. " + 
+      "Tipped with " + ((num == 1) ? "a head" : "heads") +
+      " of blue tempered steel the " + ((num == 1) ? "arrow" : "arrows") +
+      " look both graceful and beautiful, but above all else; lethal.\n"};
+}
+
+${7/^([Yy]es)|(.*)$/(?1:
+\/*
+ * Function name\: query_recover
+ * Description	\: Save weapon state
+ *\/
+void
+query_recover()
+{
+	return MASTER + "\:" + query_wep_recover();
+}
+
+\/*
+ * Function name\: init_recover
+ * Description	\: Restore weapon state
+ *\/
+void
+init_recover(string arg)
+{
+	init_wep_recover(arg);
+}
+:)/}
+$0
+endsnippet
+
+post_jump "clean_description()"
+snippet create_magic_weapon "Create magical weapon" b
+/*
+ * Function name: create_weapon
+ * Description	: $5, magical, recoverable: ${7:(Yes/No)}
+ */
+void
+create_weapon()
+{
+	add_prop(OBJ_I_IS_MAGIC_WEAPON, 1);
+
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	add_item(({ ${9:Detail} }), 
+			"${10:Detail to suggest magical nature of weapon.}\n");
+
+	set_hit(${11:0-60});
+	set_pen(${12:0-60});
+
+	add_prop(OBJ_I_WEIGHT, ${17:F_WEIGHT_DEFAULT_WEAPON($11, $12)});
+	add_prop(OBJ_I_VOLUME, ${18:F_WEIGHT_DEFAULT_WEAPON($11, $12)/5});
+	add_prop(OBJ_I_VALUE, ${19:F_VALUE_WEAPON($11, $12)}*2 + 1000); 
+
+	set_wf(this_object());
+
+	set_keep(1);
+
+	add_prop(OBJ_M_NO_BUY, 
+		"${20:Merchant nervously declines to buy so valuable item.}");
+
+	// The 'form' of the magic and the degree of its expression.
+	add_prop(MAGIC_AM_MAGIC, ({ ${21:Intensity(%):50}, "${22:enchantment}" }));
+
+	add_prop(MAGIC_AM_ID_INFO, ({
+	"${23:Identify 1 description. }", 10,		
+	"${24:Identify 2 description. }", 30,
+	"${25:Identify 3 description. }", 50}));
+
+	add_prop(OBJ_S_WIZINFO,
+		"${26:Wizard description, include all magical effects, spawn "+
+		"location and monsters that own this weapon.}\n");
+}
+
+/*
+ * Function name: wield
+ * Description:   Sets up a nice wield sequence for the players.
+ * Arguments:     wep -  the weapon the command is performed upon
+ * Returns:       1 if wielded, 0 otherwise
+ */
+mixed
+wield(object ob)
+{
+	if (!query_prop(OBJ_I_IS_MAGIC_ARMOUR))
+		return 0;
+
+	if (wielder->resolve_task(TASK_${29:DIFFICULT}, ({TS_${30:WIS}, SS_${31:_WEP_SWORD} })) < 0)
+	{
+		return "${32:Weapon resists wielder, describe the effect.}\n";
+	}
+
+	wielder->add_magic_effect(this_object());
+
+	wielder->catch_tell("${33:Describe effect of wielding the weapon.}\n");
+
+	return 0;
+}
+
+/*
+ * Function name: unwield
+ * Description:   Sets up a unwield sequence for the players.
+ *				  (Not really needed here?)
+ * Arguments:	  wep -  the weapon the command is performed upon
+ * Returns:		  0 if unwielded, 1 unwield but no message
+ *				  -1 do not unwield, print normal message
+ */
+mixed
+unwield(object ob)
+{
+	wielder->remove_magic_effect(this_object());
+
+	if (query_prop(OBJ_I_IS_MAGIC_WEAPON))
+		wielder->catch_tell("${34:Describe effect of wepon removal.}\n");
+
+	return 0;
+}
+
+/*
+ * Function name: did_hit 
+ * Description	: Called whenever the weapon is used.  
+ *				  Redefine it to do extra damage.
+ */
+public varargs int
+did_hit(int aid, string hdesc, int phurt, object enemy, int dt,
+				int phit, int dam)
+{
+	int resistance;
+	object attacker = query_wielded();
+
+	// Check for miss (did_hit is called in case of miss too)
+	if (phurt < 0)
+	{
+		return ::did_hit(aid, hdesc, phurt, enemy, dt, phit, dam);
+	}
+
+	if (${35:Hit condition, ie race or !random(10)})
+	{
+		attacker->catch_tell("${36:Describe effect for attacker.}\n");
+		enemy->catch_tell("${37:Describe effect for enemy.}\n");
+		enemy->tell_watcher(${38:Describe effect for everyone else.}, attacker);
+
+		// Ensure that magic resistance is taken into account
+		resistance = spell_resist_basic(this_object(), enemy, SS_ELEMENT_${39:DEATH},
+			TASK_${40:DIFFICULT});
+
+		// Do the extra damage, taking the magic resistance into account
+		enemy->hit_me(${41:Base damage, ie 200} * (100 - resistance) / 100, 
+					MAGIC_DT, attacker, -1);
+
+		// Kill the target, if appropriate
+		if (enemy->query_hp() <= 0)
+		{
+			enemy->do_die(attacker);
+		}
+	}
+
+	return ::did_hit(aid, hdesc, phurt, enemy, dt, phit, dam);
+}
+
+public int
+disenchant_object(object disenchanter)
+{
+	remove_prop(OBJ_I_IS_MAGIC_WEAPON);
+	remove_prop(MAGIC_AM_MAGIC);
+	add_prop(MAGIC_AM_ID_INFO, ({ 
+		"${42:This item once possessed some magical power, but it is " +
+		"now gone.}\n", 50 }));
+
+	add_prop(OBJ_I_VALUE, F_VALUE_WEAPON($11, $12)); 
+
+	remove_prop(OBJ_M_NO_BUY);
+
+	if (query_worn())
+		wearer->remove_magic_effect(this_object());
+
+	tell_room(environment(this_object()), 
+			"${43:Describe effect of disenchanting for everyone in room.}\n");
+
+	remove_item(${9/^[^"]*("[^"]*").*$/$1/});
+	add_item(({ $9 }), 
+		"${36:Describe disenchanted magical weapon detail.}\n");
+
+	return 1;
+}
+${7/^([Yy]es)|(.*)$/(?1:
+\/*
+ * Function name\: query_recover
+ * Description	\: Save armour state
+ *\/
+void
+query_recover()
+{
+	return MASTER + "\:" + query_arm_recover();
+}
+
+\/*
+ * Function name\: init_recover
+ * Description	\: Restore armour state
+ *\/
+void
+init_recover(string arg)
+{
+	init_arm_recover(arg);
+}
+:)/}
+$0
+endsnippet
+
+post_jump "clean_description()"
+snippet create_poison_weapon "Create a poison weapon" b
+static int poison_used;
+
+/*
+ * Function name: create_weapon
+ * Description	: $5, poison weapon, recoverable
+ */
+void
+create_weapon()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_hit(${9:0-40});
+	set_pen(${10:0-40});
+
+	set_wt(W_${11:KNIFE});
+	set_dt(W_${12:SLASH} | W_${13:IMPALE});
+
+	set_hands(W_${14:ANYH});
+
+	poison_used = 0;
+
+	add_prop(OBJ_I_WEIGHT, ${16:F_WEIGHT_DEFAULT_WEAPON($9, $10)});
+	add_prop(OBJ_I_VOLUME, ${17:F_WEIGHT_DEFAULT_WEAPON($9, $10)/5});
+	add_prop(OBJ_I_VALUE, ${18:F_VALUE_WEAPON($9, $10)});
+}
+
+/*
+ * Function name: remove_poison
+ * Description:   Call this to remove the poison from the blade
+ */
+void
+remove_poison()
+{
+	poison_used = 1;
+	set_long("${19:Change weapon description to make it look "
+	       + "look like ordinary weapon.}\n");
+}
+
+public varargs int
+did_hit(int aid, string hdesc, int phurt, object enemy, int dt, int phit,
+	int dam)
+{
+	object poison;
+
+	if (!poison_used && phurt > 0${20: && !random(5)})
+	{
+		setuid();
+		seteuid(getuid());
+
+		poison = clone_object(POISON_OBJECT);
+		if(${21:When poison wears off, rand/charges?})
+		{
+			remove_poison();
+		}
+
+		poison->move(enemy);
+		poison->set_time(${22:Poison duration, ie 500});
+		poison->set_interval(${23:Poison interval, ie 60});
+		poison->set_strength(${24:Poison strength, ie 40});
+		poison->set_damage(({POISON_${25:MANA}, ${26:100}, POISON_${27:STAT}, SS_${28:INT}}));
+		poison->start_poison(query_wielded());
+	}
+
+	return ::did_hit(aid, hdesc, phurt, enemy, dt, phit, dam);
+}
+
+string
+query_recover()
+{
+	return ::query_recover() + "PUSED:" + poison_used;
+}
+
+void
+init_recover(string arg)
+{
+	string str;
+
+	sscanf(arg, "%sPUSED:%d", str, poison_used);
+
+	if (poison_used)
+	{
+		remove_poison();
+	}
+
+	::init_recover(arg);
+}
+$0
+endsnippet
+
+# }}}
+
+#
+# Containers (bags, backpacks, etc)
+# {{{
+post_jump "clean_description()"
+snippet "create_backpack" "Create a backpack" b
+/*
+ * Function name: create_pack
+ * Description  : Standard genesis backpack
+ */
+void
+create_pack()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_mass_storage(1); 
+
+	set_keep(1); 
+
+	add_prop(CONT_I_WEIGHT, ${9:4500});
+	add_prop(CONT_I_MAX_WEIGHT, ${10:150000});
+	add_prop(CONT_I_VOLUME, ${11:8000});
+	add_prop(CONT_I_MAX_VOLUME, ${12:150000});
+
+	add_prop(OBJ_I_VALUE, ${13:450});
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet "create_bag" "Create a bag" b
+/*
+ * Function name: create_container
+ * Description  : Recepticle
+ */
+void
+create_container()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_keep(1); 
+
+	add_prop(CONT_I_WEIGHT, ${9:4500});
+	add_prop(CONT_I_MAX_WEIGHT, ${10:150000});
+	add_prop(CONT_I_VOLUME, ${11:8000});
+	add_prop(CONT_I_MAX_VOLUME, ${12:150000});
+
+	add_prop(OBJ_I_VALUE, ${13:450});
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet "create_chest" "Create a chest" b
+/*
+ * Function name: create_container
+ * Description  : Create a chest
+ */
+void
+create_container()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+
+	add_prop(CONT_I_WEIGHT, ${9:9500});
+	add_prop(CONT_I_MAX_WEIGHT, ${10:250000});
+	add_prop(CONT_I_VOLUME, ${11:8000});
+	add_prop(CONT_I_MAX_VOLUME, ${12:150000});
+
+	add_prop(CONT_I_RIGID, 1);
+	add_prop(CONT_I_CLOSED, 1);
+
+	add_prop(OBJ_I_VALUE, ${13:480});
+
+	set_key("${14:CHEST_KEY_ID}");
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet "create_trapped_chest" "Create a trapped chest" b
+/*
+ * Function name: create_container
+ * Description  : Recepticle
+ */
+void
+create_container()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`
+			 + "@@trap_desc@@");
+
+
+	add_prop(CONT_I_WEIGHT, ${9:9500});
+	add_prop(CONT_I_MAX_WEIGHT, ${10:250000});
+	add_prop(CONT_I_VOLUME, ${11:8000});
+	add_prop(CONT_I_MAX_VOLUME, ${12:150000});
+
+	add_prop(CONT_I_RIGID, 1);
+	add_prop(CONT_I_CLOSED, 1);
+
+	add_prop(OBJ_I_VALUE, ${13:480});
+
+	set_cf(this_object());
+
+	set_key("${14:CHEST_KEY_ID}");
+}
+
+/*
+ * Function name: spring trap
+ * Description:   This function is called when the trap is sprung.
+ * Arguments:	  object who - the person who sprung the trap
+ */
+public void
+spring_trap(object who)
+{
+	if (!query_trapped())
+	{
+		return;
+	}
+
+	who->catch_tell("${15:A small razor sharp blade slashes "+
+		"your hand as you " + query_verb() + " the chest!}\n");
+	who->heal_hp(-(${16:90 + random(100)}));
+
+	if (who->query_hp() < 1)
+	{
+	who->do_die(this_object());
+	}
+
+	set_trapped(0);
+}
+
+/*
+ * Function name: open
+ * Description:   This is called when the chest is opened.	We use it to
+ *				  spring the trap when that happens.
+ */
+public mixed
+open(object ob)
+{
+	spring_trap(this_player());
+
+	return 0;
+}
+
+/*
+ * Function name: pick_fail
+ * Description:   This is called when someone tries to pick the 
+ *				  lock, but fails.	We want to spring the trap
+ *				  if that happens.
+ * Arguments:	  object who - the person that attempted to pick the lock
+ *				  int skill  - how well the well (badly) the lock was picked 
+ */
+public void
+pick_fail(object who, int skill)
+{
+	spring_trap(who);
+}
+
+public void
+init()
+{
+	::init();
+	init_trap();
+}
+endsnippet
+
+# }}}
+
+#
+# Food and drinks
+# {{{
+post_jump "clean_description()"
+snippet "create_food" "Create food" b
+/*
+ * Function name: create_food
+ * Description  : $5, food
+ */
+void
+create_food()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_amount(${9:Nutritional value[g], ie 50}); 
+
+	add_prop(CONT_I_WEIGHT, ${10:$9});
+	add_prop(CONT_I_VOLUME, ${12:30});
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet "create_drink" "Create drink" b
+/*
+ * Function name: create_drink
+ * Description  : $5, drink
+ */
+void
+create_drink()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_soft_amount(${9:Soft drink amount[ml], ie 330}); 
+	set_alco_amount(${10:Alcohol[ml], ie 16}); 
+
+	add_prop(CONT_I_WEIGHT, ${11:`!p snip.rv=str(int(t[9])+int(t[10])`});
+	add_prop(CONT_I_VOLUME, ${12:346});
+}
+endsnippet
+
+# }}}
+
+#
+# Rope
+# {{{
+# }}}
+
+#
+# Message (for messengers)
+# {{{
+# }}}
+
+#
+# Scrolls (books/magic scrolls/magic tomes)
+# {{{
+# }}}
+
+# vim: foldmethod=marker

@@ -489,8 +489,15 @@ syn case match
 " Nodule: Comment string {{{1
 
 " lpcCommentGroup allows adding matches for special things in comments
-syn keyword	lpcTodo		contained TODO FIXME XXX
-syn cluster	lpcCommentGroup	contains=lpcTodo
+syn match	lpcCommentTitle	contained "Function\s*:"
+syn match	lpcCommentTitle	contained "Function name\s*:"
+syn match	lpcCommentTitle	contained "Arguments\s*:"
+syn match	lpcCommentTitle	contained "Argument\s*:"
+syn match	lpcCommentTitle	contained "Notice\s*:"
+syn match	lpcCommentTitle	contained "Returns\s*:"
+syn match	lpcCommentTitle	contained "Description\s*:"
+syn keyword	lpcTodo		contained TODO FIXME XXX NOTE
+syn cluster	lpcCommentGroup	contains=lpcTodo,lpcCommentTitle
 
 if exists("c_comment_strings")
   " A comment can contain lpcString, lpcCharacter and lpcNumber.
@@ -635,6 +642,7 @@ if version >= 508 || !exists("did_lpc_syn_inits")
   " Standard type below
   HiLink lpcApplies		Special
   HiLink lpcCharacter		Character
+  HiLink lpcCommentTitle        PreProc
   HiLink lpcComment		Comment
   HiLink lpcConditional		Conditional
   HiLink lpcConstant		Constant

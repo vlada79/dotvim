@@ -1,78 +1,93 @@
 "
 " Vundle
 "
-set rtp+=~/.vim/bundle/vundle
+set nocompatible
+set rtp+=~/.vim/bundle/Vundle.vim
 
 filetype off
 
-call vundle#rc()
+call vundle#begin()
 
-Bundle 'marik/vundle'
+" Let Vundle manage itself
+Plugin 'VundleVim/Vundle.vim'
 
 " Classics
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-commentary'
-"Bundle 'tsaleh/vim-matchit'
-Bundle 'duff/vim-bufonly'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-commentary'
+"Plugin 'tsaleh/vim-matchit'
+Plugin 'duff/vim-bufonly'
 
 " Ruby powertools
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'tpope/vim-bundler'
-Bundle 'noprompt/vim-yardoc'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'tpope/vim-bundler'
+Plugin 'noprompt/vim-yardoc'
 
 " Python
-Bundle 'klen/python-mode'
-Bundle 'glench/vim-jinja2-syntax'
-
-" Puppet
-Bundle 'rodjek/vim-puppet'
+Plugin 'klen/python-mode'
+Plugin 'glench/vim-jinja2-syntax'
 
 " Coffee
-Bundle 'kchmck/vim-coffee-script'
+Plugin 'kchmck/vim-coffee-script'
 
 " JSON
-Bundle 'elzr/vim-json'
+Plugin 'elzr/vim-json'
+
+" HTML/CSS
+"Plugin 'mattn/emmet-vim' " Yet to test it out
+Plugin 'vim-scripts/Better-CSS-Syntax-for-Vim'
+Plugin 'ap/vim-css-color'
 
 " Git powertools
-Bundle 'tpope/vim-git'
-Bundle 'tpope/vim-fugitive'
+Plugin 'tpope/vim-git'
+Plugin 'tpope/vim-fugitive'
 
 " Experimental
-Plugin 'Decho' " Debug netrw output for FTP edit
-Bundle 'mattn/webapi-vim'
-Bundle 'vim-scripts/Better-CSS-Syntax-for-Vim'
-Bundle 'ap/vim-css-color'
-Bundle 'vim-scripts/AnsiEsc.vim'
-Bundle 'L9'
-Bundle 'FuzzyFinder'
-Bundle 'xolox/vim-misc'
-Bundle 'xolox/vim-notes'
+Plugin 'mattn/webapi-vim'
+Plugin 'L9'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-notes'
 
 " Colorscheme tools
 Plugin 'xterm-color-table.vim'
-Bundle 'vim-scripts/CSApprox'
-Bundle 'gerw/vim-HiLinkTrace'
+Plugin 'vim-scripts/CSApprox'
+Plugin 'gerw/vim-HiLinkTrace'
 
 " Themes
-Bundle 'jellybeans.vim'
-Bundle 'Solarized'
-Bundle 'railscasts'
+Plugin 'jellybeans.vim'
+Plugin 'Solarized'
+Plugin 'railscasts'
+
+" Coding eyecandy
+Plugin 'nathanaelkane/vim-indent-guides'
+
+" Thesaurus plugin (:Thesaurus, <Leader>cs)
+Plugin 'Ron89/thesaurus_query.vim'
 
 " Productivity tools
-Bundle 'ctrlp.vim'
-Bundle 'The-NERD-tree'
-"Bundle 'Valloric/YouCompleteMe'
-Bundle 'Shougo/neocomplete.vim'
+Plugin 'ctrlp.vim'
+Plugin 'The-NERD-tree'
+Plugin 'Shougo/neocomplete.vim'
+Plugin 'Shougo/neoinclude.vim'
+Plugin 'SirVer/ultisnips'
+
+" Golden ratio resizing (should fork and fix this)
+"Plugin 'roman/golden-ratio'
 
 " Ascii Art
-Bundle "DrawIt"
-Bundle 'fadein/Figlet.vim'
-Bundle 'godlygeek/tabular'
+Plugin 'DrawIt'
+Plugin 'fadein/Figlet.vim'
+Plugin 'godlygeek/tabular'
+Plugin 'vim-scripts/AnsiEsc.vim'
 
 " Code navigation through tags/cscope
-Bundle 'hari-rangarajan/CCTree'
-Bundle 'majutsushi/tagbar'
+Plugin 'hari-rangarajan/CCTree'
+Plugin 'majutsushi/tagbar'
+
+call vundle#end()
+
+filetype plugin on
+filetype indent on
 
 "
 " Setup
@@ -87,14 +102,10 @@ set guioptions=Me
 set guitablabel=%t
 set guicursor=n:blinkwait5000-blinkon10000-blinkoff200
 
-set t_Co=256
-
 set ignorecase smartcase
 
 set hidden
-
 set nobackup
-set nowritebackup " For FTP connections
 set noswapfile
 
 set encoding=utf-8
@@ -104,7 +115,7 @@ set backspace=indent,eol,start
 
 set sts=2 sw=2 ts=8 et
 set incsearch hlsearch
-set nu magic nowrap nocompatible
+set nu magic nowrap 
 set nosmartindent nocindent autoindent
 
 " Status line
@@ -122,7 +133,7 @@ set backupdir=/tmp
 set tags=~/rezon/hermes/tags
 
 " cscope setup
-if  has("cscope")
+if has("cscope")
   set cscopetag
   set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
   set cscoperelative
@@ -143,45 +154,74 @@ endif
 
 set mouse=a
 set dictionary=/usr/share/dict/words
+set thesaurus=~/.vim/thesaurus/mthesaur.txt
 
-filetype plugin on
-filetype indent on
 syntax on
 colorscheme lovecraft
 
 set nospell spelllang=en_us
 
-" Ruby folding stuff (experimental)
-function! RubyMethodFoldText()
-    let nl = v:foldend - v:foldstart + 1
-    let linetext = substitute(getline(v:foldstart),"def","method:",1)
-    let txt = linetext . ' ['. nl . ' LoC] '
-    return txt
-endfunction
-set foldtext=RubyMethodFoldText()
 
-function! RubyMethodFold(line)
-  let syms2 = map(synstack(a:line, indent(a:line)+1), 'synIDattr(v:val, "name", 0)')
-  return !empty(filter(syms2, 'count(["rubyMethodBlock", "rubyDefine"], v:val)>0'))
-endfunction
-
-set foldmethod=expr
-set foldexpr=RubyMethodFold(v:lnum)
-set foldlevelstart=1
-
-nnoremap <silent> <F6> :TagbarToggle<CR>
+nnoremap <silent> <Leader><Tab> :TagbarToggle<CR>
 nnoremap <silent> <F12> :NERDTreeToggle<CR>
-nnoremap <silent> <C-F12> :Lexplore<CR>
 nnoremap <F2> :cprev<CR>
 nnoremap <F3> :cnext<CR>
 nnoremap <F4> :cw<CR>
 
-" SHRM CMS project specifics
-command! -nargs=+ CoreGrep grep -R <q-args> ~/shrm/sherman-core/lib/sherman-core/ --include=*.rb
-command! -nargs=+ ManageGrep grep -R <q-args> ~/shrm/sherman-manage/lib/sherman-manage/ --include=*.rb --include=*.haml
-command! -nargs=+ AgentsGrep grep -R <q-args> ~/shrm/sherman-agents/lib/sherman-agents/ --include=*.rb
-command! -nargs=+ MossGrep grep -R <q-args> ~/shrm/sherman-moss/ --include=*.rb
-command! -nargs=+ UtilsGrep grep -R <q-args> ~/shrm/sherman-utils/ --include=*.rb
+" BiG key maps
+" nnoremap <silent> <Tab> :bn<cr>
+" nnoremap <silent> <S-Tab> :bp<cr>
+" nnoremap <silent> <Enter> :cn<cr>
+" nnoremap <silent> <S-Enter> :cp<cr>
+nnoremap <silent> <C-Enter> :e $MYVIMRC<cr>
+
+" Set passive FTP mode
+"Plugin 'Decho' " Debug netrw output for FTP edit
+let g:netrw_ftp_cmd="ftp -z nossl -p"
+let g:netrw_use_errorwindow=0
+let g:netrw_silent=1
+
+if !has('gui_running')
+  if $TERM == 'xterm-256color'
+    set termguicolors
+  else
+    let g:solarized_termcolors=256
+    set t_Co=256
+  endif
+
+  set background=dark
+  colorscheme lovecraft
+end
+
+" CtrlP configuration
+let g:ctrlp_cmd = 'CtrlPMRUFiles'
+
+" Tagbar (:TagbarToggle)
+let g:tagbar_autoclose = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_zoomwidth = 0
+let g:tagbar_autoshowtag = 1
+
+" Goldenratio setup (:GoldenRatioToggle and :GoldenRatioResize)
+"let g:golden_ratio_exclude_nonmodifiable = 1
+"let g:golden_ration_autocommand = 0 " Does not work well atm
+
+" Indent guides (activate with <leader>ig)
+let g:indent_guides_guide_size = 1
+let g:indent_guides_start_level = 2
+
+" Neocomplete
+let g:neocomplete#enable_at_startup = 0
+let g:neocomplete#enable_smart_case = 1
+
+" UltiSnips config
+let g:UltiSnipsSnippetsDir =  "~/.vim/ultisnips"
+let g:UltiSnipsSnippetDirectories = [ "ultisnips" ]
+let g:UltiSnipsExpandTrigger =       "<tab>"
+let g:UltiSnipsListSnippets =        "<c-tab>"
+let g:UltiSnipsJumpForwardTrigger =  "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
 
 " Log management
 function! ShowLog(file)
@@ -195,42 +235,9 @@ function! ShowLog(file)
   wincmd p
 endfunction
 
-nnoremap <Leader>sc :call ShowLog('~/shrm/sherman-core/server.log')<CR>
-nnoremap <Leader>sm :call ShowLog('~/shrm/sherman-manage/server.log')<CR>
-nnoremap <Leader>sa :call ShowLog('~/shrm/sherman-agents/server.log')<CR>
-nnoremap <Leader>sp :call ShowLog('~/shrm/apollo/server.log')<CR>
-
-" BiG key maps
-" nnoremap <silent> <Tab> :bn<cr>
-" nnoremap <silent> <S-Tab> :bp<cr>
-" nnoremap <silent> <Enter> :cn<cr>
-" nnoremap <silent> <S-Enter> :cp<cr>
-nnoremap <silent> <C-Enter> :e $MYVIMRC<cr>
-
-" CtrlP configuration
-let g:ctrlp_cmd = 'CtrlPMRUFiles'
-
-if !has('gui_running')
-  let g:solarized_termcolors=256
-  set background=dark
-  colorscheme lovecraft
-end
-
-" Set passive FTP mode
-let g:netrw_ftp_cmd="ftp -z nossl -p"
-let g:netrw_use_errorwindow=0
-let g:netrw_silent=1
-
 " Reload .vimrc after each save
 augroup VimRc
 autocmd!
 autocmd BufWritePost .vimrc :so $MYVIMRC
 augroup END
-
-" Tagbar
-let g:tagbar_autoclose = 1
-
-" Neocomplete
-let g:neocomplete#enable_at_startup = 0
-let g:neocomplete#enable_smart_case = 1
 

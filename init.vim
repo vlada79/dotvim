@@ -1,97 +1,90 @@
 "
-" Vundle
+" Vim-plug
 "
-set nocompatible
-set rtp+=~/.vim/bundle/Vundle.vim
-
-filetype off
-
-call vundle#begin()
+call plug#begin('~/.config/nvim/plugged')
 
 " Let Vundle manage itself
-Plugin 'VundleVim/Vundle.vim'
+Plug 'VundleVim/Vundle.vim'
 
 " Classics
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-commentary'
 "Plugin 'tsaleh/vim-matchit'
-Plugin 'duff/vim-bufonly'
+Plug 'duff/vim-bufonly'
 
 " Ruby powertools
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-bundler'
-Plugin 'noprompt/vim-yardoc'
+Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-bundler'
+Plug 'noprompt/vim-yardoc'
 
 " Python
-Plugin 'klen/python-mode'
-Plugin 'glench/vim-jinja2-syntax'
+Plug 'klen/python-mode'
+Plug 'glench/vim-jinja2-syntax'
 
 " Coffee
-Plugin 'kchmck/vim-coffee-script'
+Plug 'kchmck/vim-coffee-script'
 
 " JSON
-Plugin 'elzr/vim-json'
+Plug 'elzr/vim-json'
 
 " HTML/CSS
 "Plugin 'mattn/emmet-vim' " Yet to test it out
-Plugin 'vim-scripts/Better-CSS-Syntax-for-Vim'
-Plugin 'ap/vim-css-color'
+Plug 'vim-scripts/Better-CSS-Syntax-for-Vim'
+Plug 'ap/vim-css-color'
 
 " Git powertools
-Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-fugitive'
 
 " Experimental
-Plugin 'mattn/webapi-vim'
-Plugin 'L9'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-notes'
+Plug 'mattn/webapi-vim'
+Plug 'L9'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
 
 " Colorscheme tools
-Plugin 'xterm-color-table.vim'
-Plugin 'vim-scripts/CSApprox'
-Plugin 'gerw/vim-HiLinkTrace'
+Plug 'xterm-color-table.vim'
+Plug 'vim-scripts/CSApprox'
+Plug 'gerw/vim-HiLinkTrace'
 
 " Themes
-Plugin 'jellybeans.vim'
-Plugin 'Solarized'
-Plugin 'railscasts'
+Plug 'jellybeans.vim'
+Plug 'Solarized'
+Plug 'railscasts'
 
 " Coding eyecandy
-Plugin 'nathanaelkane/vim-indent-guides'
+Plug 'nathanaelkane/vim-indent-guides'
 
 " Thesaurus plugin (:Thesaurus, <Leader>cs)
-Plugin 'Ron89/thesaurus_query.vim'
+Plug 'Ron89/thesaurus_query.vim'
 
 " Productivity tools
-Plugin 'ctrlp.vim'
-Plugin 'The-NERD-tree'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'Shougo/neoinclude.vim'
-Plugin 'SirVer/ultisnips'
+Plug 'ctrlp.vim'
+Plug 'The-NERD-tree'
+"Plug 'Shougo/neocomplete.vim'
+"Plug 'Shougo/neoinclude.vim'
+Plug 'SirVer/ultisnips'
 
 " Golden ratio resizing (should fork and fix this)
 "Plugin 'roman/golden-ratio'
 
 " Ascii Art
-Plugin 'DrawIt'
-Plugin 'fadein/Figlet.vim'
-Plugin 'godlygeek/tabular'
-Plugin 'vim-scripts/AnsiEsc.vim'
+Plug 'DrawIt'
+Plug 'fadein/Figlet.vim'
+Plug 'godlygeek/tabular'
+Plug 'vim-scripts/AnsiEsc.vim'
 
 " Code navigation through tags/cscope
-Plugin 'hari-rangarajan/CCTree'
-Plugin 'majutsushi/tagbar'
+Plug 'hari-rangarajan/CCTree'
+Plug 'majutsushi/tagbar'
 
-call vundle#end()
-
-filetype plugin on
-filetype indent on
+call plug#end()
 
 "
 " Setup
 "
+set nocompatible
 set langmenu=none
 
 "  Configure GUI
@@ -131,6 +124,10 @@ set statusline=%<%1*%t%*\ %20.30(%{&ff}\ %{&fenc}\ %{&ft}%)\ %2*%10.40(%h%w%m%)%
 set directory=/tmp
 set backupdir=/tmp
 set tags=~/rezon/hermes/tags
+
+filetype plugin on
+filetype indent on
+
 
 " cscope setup
 if has("cscope")
@@ -210,10 +207,6 @@ let g:tagbar_autoshowtag = 1
 let g:indent_guides_guide_size = 1
 let g:indent_guides_start_level = 2
 
-" Neocomplete
-let g:neocomplete#enable_at_startup = 0
-let g:neocomplete#enable_smart_case = 1
-
 " UltiSnips config
 let g:UltiSnipsSnippetsDir =  "~/.vim/ultisnips"
 let g:UltiSnipsSnippetDirectories = [ "ultisnips" ]
@@ -238,6 +231,6 @@ endfunction
 " Reload .vimrc after each save
 augroup VimRc
 autocmd!
-autocmd BufWritePost .vimrc :so $MYVIMRC
+autocmd BufWritePost init.vim :so $MYVIMRC
 augroup END
 

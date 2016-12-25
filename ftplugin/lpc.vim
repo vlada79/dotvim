@@ -165,6 +165,15 @@ command! -buffer -nargs=+ -complete=tag Mudlib vimgrep /<args>/j ~/genesis/mud/l
 command! -buffer -nargs=+ -complete=tag Code vimgrep /<args>/j ~/genesis/mud/lib/w/zilmop/**/* | cw
 command! -buffer -nargs=+ -complete=tag Fn ilist /^\S*<args>\S*(/
 
+if has('nvim')
+  "tnoremap <C-w>h <C-\><C-n><C-w>h
+  "tnoremap <C-w>j <C-\><C-n><C-w>j
+  "tnoremap <C-w>k <C-\><C-n><C-w>k
+  "tnoremap <C-w>l <C-\><C-n><C-w>l
+
+  command! -buffer Genesis :split enew | terminal ~/genesis/mud/connect.sh
+endif
+
 " TODO: 
 "
 " - CleverTab conflicts with UltiSnips

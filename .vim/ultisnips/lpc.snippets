@@ -521,7 +521,7 @@ $0
 endsnippet
 
 post_jump "clean_description()"
-snippet create_bow "Create an arrow" b
+snippet create_arrow "Create an arrow" b
 /*
  * Function name: create_arrow
  * Description	: $1 $2 arrow, recoverable: ${6:(Yes/No)}
@@ -883,7 +883,7 @@ endsnippet
 # Containers (bags, backpacks, etc)
 # {{{
 post_jump "clean_description()"
-snippet "create_backpack" "Create a backpack" b
+snippet create_backpack "Create a backpack" b
 /*
  * Function name: create_pack
  * Description  : Standard genesis backpack
@@ -920,7 +920,7 @@ create_pack()
 endsnippet
 
 post_jump "clean_description()"
-snippet "create_bag" "Create a bag" b
+snippet create_bag "Create a bag" b
 /*
  * Function name: create_container
  * Description  : Recepticle
@@ -955,7 +955,7 @@ create_container()
 endsnippet
 
 post_jump "clean_description()"
-snippet "create_chest" "Create a chest" b
+snippet create_chest "Create a chest" b
 /*
  * Function name: create_container
  * Description  : Create a chest
@@ -994,7 +994,7 @@ create_container()
 endsnippet
 
 post_jump "clean_description()"
-snippet "create_trapped_chest" "Create a trapped chest" b
+snippet create_trapped_chest "Create a trapped chest" b
 /*
  * Function name: create_container
  * Description  : Recepticle
@@ -1100,7 +1100,7 @@ endsnippet
 # Food and drinks
 # {{{
 post_jump "clean_description()"
-snippet "create_food" "Create food" b
+snippet create_food "Create food" b
 /*
  * Function name: create_food
  * Description  : $5, food
@@ -1131,7 +1131,7 @@ create_food()
 endsnippet
 
 post_jump "clean_description()"
-snippet "create_drink" "Create drink" b
+snippet create_drink "Create drink" b
 /*
  * Function name: create_drink
  * Description  : $5, drink
@@ -1161,6 +1161,40 @@ create_drink()
 	add_prop(CONT_I_VOLUME, ${12:346});
 }
 endsnippet
+
+# }}}
+
+#
+# Gem
+# {{{
+post_jump "clean_description()"
+snippet create_gem "Create gem" b
+/*
+ * Function name: create_object
+ * Description  : $5
+ */
+void
+create_object()
+{
+	set_name("${1:gem}");
+	set_pname("${2:gems}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	add_prop(OBJ_I_VALUE, ${11:100});
+}
+endsnippet
+
 
 # }}}
 

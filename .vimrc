@@ -52,6 +52,7 @@ Plugin 'xolox/vim-notes'
 Plugin 'xterm-color-table.vim'
 Plugin 'vim-scripts/CSApprox'
 Plugin 'gerw/vim-HiLinkTrace'
+Plugin 'chrisbra/Colorizer' " Show color codes & colornames
 
 " Themes
 Plugin 'jellybeans.vim'
@@ -67,8 +68,6 @@ Plugin 'Ron89/thesaurus_query.vim'
 " Productivity tools
 Plugin 'ctrlp.vim'
 Plugin 'The-NERD-tree'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'Shougo/neoinclude.vim'
 Plugin 'SirVer/ultisnips'
 
 " Golden ratio resizing (should fork and fix this)
@@ -83,6 +82,7 @@ Plugin 'vim-scripts/AnsiEsc.vim'
 " Code navigation through tags/cscope
 Plugin 'hari-rangarajan/CCTree'
 Plugin 'majutsushi/tagbar'
+Plugin 'tomtom/quickfixsigns_vim'
 
 call vundle#end()
 
@@ -161,19 +161,20 @@ colorscheme lovecraft
 
 set nospell spelllang=en_us
 
-
-nnoremap <silent> <Leader><Tab> :TagbarToggle<CR>
-nnoremap <silent> <F12> :NERDTreeToggle<CR>
-nnoremap <F2> :cprev<CR>
-nnoremap <F3> :cnext<CR>
-nnoremap <F4> :cw<CR>
+nnoremap <silent> <F2>    :cprev<CR>
+nnoremap <silent> <F3>    :cnext<CR>
+nnoremap <silent> <F4>    :cw<CR>
+nnoremap <silent> <F5>    :silent! make!<CR>
 
 " BiG key maps
-" nnoremap <silent> <Tab> :bn<cr>
-" nnoremap <silent> <S-Tab> :bp<cr>
-" nnoremap <silent> <Enter> :cn<cr>
-" nnoremap <silent> <S-Enter> :cp<cr>
 nnoremap <silent> <C-Enter> :e $MYVIMRC<cr>
+nnoremap <silent> <Leader>vim :e $MYVIMRC<cr>
+
+" Remap up/down keys when popup menu appears
+inoremap <expr><C-d> pumvisible() ? "\<PageDown>" : "\<C-d>"
+inoremap <expr><C-u> pumvisible() ? "\<PageUp>"   : "\<C-u>"
+inoremap <expr><C-j> pumvisible() ? "\<Down>"     : "\<C-j>"
+inoremap <expr><C-k> pumvisible() ? "\<Up>"       : "\<C-k>"
 
 " Set passive FTP mode
 "Plugin 'Decho' " Debug netrw output for FTP edit
@@ -193,14 +194,25 @@ if !has('gui_running')
   colorscheme lovecraft
 end
 
+" NERDTree configuration
+let NERDTreeDirArrows = 1
+let NERDTreeQuitOnOpen = 1
+
+" NERDTree toggle
+nnoremap <silent> <F12> :NERDTreeToggle<CR>
+nnoremap <silent><expr> <Leader><Tab> exists('t:NERDTreeBufName') ? (expand('%') != t:NERDTreeBufName ? ":NERDTreeFind<CR>" : ":NERDTreeClose<CR>" ) : ":NERDTreeFind<CR>"
+
 " CtrlP configuration
 let g:ctrlp_cmd = 'CtrlPMRUFiles'
 
 " Tagbar (:TagbarToggle)
-let g:tagbar_autoclose = 1
-let g:tagbar_autofocus = 1
-let g:tagbar_zoomwidth = 0
+let g:tagbar_autoclose   = 1
+let g:tagbar_autofocus   = 1
+let g:tagbar_zoomwidth   = 0
 let g:tagbar_autoshowtag = 1
+
+" Tagbar toggle
+nnoremap <silent> <Leader><CR>  :TagbarToggle<CR>
 
 " Goldenratio setup (:GoldenRatioToggle and :GoldenRatioResize)
 "let g:golden_ratio_exclude_nonmodifiable = 1
@@ -210,18 +222,24 @@ let g:tagbar_autoshowtag = 1
 let g:indent_guides_guide_size = 1
 let g:indent_guides_start_level = 2
 
-" Neocomplete
-let g:neocomplete#enable_at_startup = 0
-let g:neocomplete#enable_smart_case = 1
+" Autocompletion
+inoremap <expr><C-Space> '<C-x><C-o>'
 
 " UltiSnips config
-let g:UltiSnipsSnippetsDir =  "~/.vim/ultisnips"
-let g:UltiSnipsSnippetDirectories = [ "ultisnips" ]
-let g:UltiSnipsExpandTrigger =       "<tab>"
-let g:UltiSnipsListSnippets =        "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger =  "<tab>"
+let g:UltiSnipsSnippetsDir         = "~/.vim/ultisnips"
+let g:UltiSnipsSnippetDirectories  = [ "ultisnips" ]
+let g:UltiSnipsExpandTrigger       = "<tab>"
+let g:UltiSnipsListSnippets        = "<c-tab>"
+let g:UltiSnipsJumpForwardTrigger  = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
+" Quickfixsign config
+set signcolumn=auto
+let g:quickfixsigns_classes = [ 'qfl' ]
+let g:quickfixsigns_use_dummy = 0
+"sign define QFS_QFL icon= text=☢✗ texthl=Cursor
+sign define QFS_QFL icon= text=⚡ texthl=Cursor
+nnoremap <F8> :QuickfixsignsToggle<CR>
 
 " Log management
 function! ShowLog(file)

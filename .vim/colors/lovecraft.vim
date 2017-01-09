@@ -104,42 +104,20 @@ highlight Ignore        guifg=#204050
 highlight Error         guifg=LightYellow  guibg=FireBrick
 highlight Todo          guifg=Cyan guibg=#507080
 
-if v:version >= 700
-    highlight PMenu      gui=bold guibg=LightSkyBlue4 guifg=honeydew2
-    highlight PMenuSel   gui=bold guibg=DarkGreen guifg=honeydew2
-    highlight PMenuSbar  gui=bold guibg=LightSkyBlue4
-    highlight PMenuThumb gui=bold guibg=DarkGreen
-    highlight SpellBad   gui=undercurl guisp=Red
-    highlight SpellRare  gui=undercurl guisp=Orange
-    highlight SpellLocal gui=undercurl guisp=Orange
-    highlight SpellCap   gui=undercurl guisp=Yellow
-endif
+" Menu
+highlight PMenu      guibg=#0A1414 guifg=honeydew2
+highlight PMenuSel   guibg=black guifg=honeydew4
+highlight PMenuSbar  guibg=#102020
+highlight PMenuThumb guibg=honeydew4
 
-""" Console
-if v:version >= 700
-    highlight PMenu      cterm=bold ctermbg=DarkGreen ctermfg=Gray
-    highlight PMenuSel   cterm=bold ctermbg=Yellow ctermfg=Gray
-    highlight PMenuSbar  cterm=bold ctermbg=DarkGreen
-    highlight PMenuThumb cterm=bold ctermbg=Yellow
-    highlight SpellBad   ctermbg=Red
-    highlight SpellRare  ctermbg=Red
-    highlight SpellLocal ctermbg=Red
-    highlight SpellCap   ctermbg=Yellow
-endif
+" Spell suggestions
+highlight SpellBad   gui=undercurl guisp=firebrick1
+highlight SpellRare  gui=undercurl guisp=gold2
+highlight SpellLocal gui=undercurl guisp=orange
+highlight SpellCap   gui=undercurl guisp=yellow
 
-highlight Normal        ctermfg=Gray ctermbg=None
-highlight Search        ctermfg=Black ctermbg=Red cterm=NONE
-highlight Visual        cterm=reverse
-highlight Cursor        ctermfg=Black ctermbg=Green cterm=bold
-highlight Special       ctermfg=Brown
-highlight Comment       ctermfg=DarkGray
-highlight StatusLine    ctermfg=Blue ctermbg=White
-highlight Statement     ctermfg=Yellow cterm=NONE
-highlight Type          cterm=NONE
-highlight Macro         ctermfg=DarkRed
-highlight Identifier    ctermfg=DarkYellow
-highlight Structure     ctermfg=DarkGreen
-highlight String        ctermfg=DarkCyan
+" SignColumn
+highlight SignColumn guibg=#0D1B1B
 
 " Status line highlites
 highlight User1         gui=none guibg=black guifg=lightyellow

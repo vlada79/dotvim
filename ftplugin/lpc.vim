@@ -400,7 +400,7 @@ function! LpcComplete(word)
     if l:all_caps && l:tag['kind'] == 'd'
       " Complete defines
       let l:tag_file = fnamemodify(l:tag['filename'], ':p:s?^' . g:lpc_home . '??')
-      let l:index = index(deps, l:tag_file)
+      let l:index = index(l:deps, l:tag_file)
       let l:priority = l:index
 
       let l:wdist = stridx(l:tag['name'], l:word)
@@ -429,7 +429,7 @@ function! LpcComplete(word)
           let l:index = -1
         end
       else
-        let l:index = index(deps, l:tag_file)
+        let l:index = index(l:deps, l:tag_file)
         let l:priority = l:index
 
         if l:tag['kind'] == 'v'

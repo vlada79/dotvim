@@ -66,6 +66,11 @@ Plug 'ctrlp.vim'
 Plug 'The-NERD-tree'
 Plug 'SirVer/ultisnips'
 
+" Org tools
+Plug 'vimwiki'
+Plug 'blindFS/vim-taskwarrior'
+Plug 'tbabej/taskwiki'
+
 " Golden ratio resizing (should fork and fix this)
 "Plugin 'roman/golden-ratio'
 
@@ -111,6 +116,8 @@ set sts=2 sw=2 ts=8 et
 set incsearch hlsearch
 set nu magic nowrap 
 set nosmartindent nocindent autoindent
+
+set concealcursor=c
 
 " Status line
 set laststatus=2
@@ -182,7 +189,7 @@ let g:netrw_use_errorwindow=0
 let g:netrw_silent=1
 
 if !has('gui_running')
-  if $TERM == 'xterm-256color'
+  if $TERM == 'xterm-256color' || $TERM == 'st-256color'
     set termguicolors
   else
     let g:solarized_termcolors=256
@@ -216,6 +223,40 @@ nnoremap <silent> <Leader><CR>  :TagbarToggle<CR>
 " Goldenratio setup (:GoldenRatioToggle and :GoldenRatioResize)
 "let g:golden_ratio_exclude_nonmodifiable = 1
 "let g:golden_ration_autocommand = 0 " Does not work well atm
+
+" Vimwiki config
+let g:vimwiki_listsyms = ' .oOX'
+let g:vimwiki_hl_headers = 1
+let default_wiki = {}
+let default_wiki.path = '~/.notes/'
+let g:vimwiki_list = [default_wiki]
+
+function! VimwikiLinkHandler(link)
+  let link = a:link
+  if link =~# '^vfile:'
+    let link = expand(link[6:])
+  else
+    return 0
+  endif
+
+  if !isdirectory(link) && !filereadable(link)
+    echomsg 'Vimwiki Error: Unable to resolve link!'
+    return 0
+  endif
+
+  if isdirectory(link)
+    execute 'NERDTree ' . fnameescape(link)
+  else
+    execute 'edit ' . fnameescape(link)
+  endif
+  return 1
+endfunction
+
+" Disable conceal cursor for now (see how it works as is)
+"augroup VimWikiConfig
+"autocmd!
+"autocmd BufEnter *.wiki setl concealcursor=c
+"augroup END
 
 " Indent guides (activate with <leader>ig)
 let g:indent_guides_guide_size = 1

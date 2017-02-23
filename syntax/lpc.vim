@@ -491,12 +491,14 @@ syn case match
 
 " lpcCommentGroup allows adding matches for special things in comments
 syn match	lpcCommentTitle	contained "Function\s*:"
-syn match	lpcCommentTitle	contained "Function name\s*:"
+syn match	lpcCommentTitle	contained "Function [Nn]ame\s*:"
 syn match	lpcCommentTitle	contained "Arguments\s*:"
 syn match	lpcCommentTitle	contained "Argument\s*:"
 syn match	lpcCommentTitle	contained "Notice\s*:"
 syn match	lpcCommentTitle	contained "Returns\s*:"
+syn match	lpcCommentTitle	contained "Return\s*:"
 syn match	lpcCommentTitle	contained "Description\s*:"
+syn match	lpcCommentTitle	contained "See [aA]lso\s*:"
 syn keyword	lpcTodo		contained TODO FIXME XXX NOTE
 syn cluster	lpcCommentGroup	contains=lpcTodo,lpcCommentTitle
 

@@ -15,8 +15,9 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
-"Plugin 'tsaleh/vim-matchit'
+Plugin 'tpope/vim-repeat'
 Plugin 'duff/vim-bufonly'
+Plugin 'neomake/neomake'
 
 " Ruby powertools
 Plugin 'vim-ruby/vim-ruby'
@@ -70,6 +71,11 @@ Plugin 'ctrlp.vim'
 Plugin 'The-NERD-tree'
 Plugin 'SirVer/ultisnips'
 
+" Org tools
+Plugin 'vimwiki'
+Plugin 'blindFS/vim-taskwarrior'
+Plugin 'tbabej/taskwiki'
+
 " Golden ratio resizing (should fork and fix this)
 "Plugin 'roman/golden-ratio'
 
@@ -118,6 +124,8 @@ set incsearch hlsearch
 set nu magic nowrap 
 set nosmartindent nocindent autoindent
 
+set concealcursor=c
+
 " Status line
 set laststatus=2
 
@@ -164,7 +172,7 @@ set nospell spelllang=en_us
 nnoremap <silent> <F2>    :cprev<CR>
 nnoremap <silent> <F3>    :cnext<CR>
 nnoremap <silent> <F4>    :cw<CR>
-nnoremap <silent> <F5>    :silent! make!<CR>
+nnoremap <silent> <F5>    :silent! make! <bar> redraw!<CR>
 
 " BiG key maps
 nnoremap <silent> <C-Enter> :e $MYVIMRC<cr>
@@ -217,6 +225,40 @@ nnoremap <silent> <Leader><CR>  :TagbarToggle<CR>
 " Goldenratio setup (:GoldenRatioToggle and :GoldenRatioResize)
 "let g:golden_ratio_exclude_nonmodifiable = 1
 "let g:golden_ration_autocommand = 0 " Does not work well atm
+
+" Vimwiki config
+let g:vimwiki_listsyms = ' .oOX'
+let g:vimwiki_hl_headers = 1
+let default_wiki = {}
+let default_wiki.path = '~/.notes/'
+let g:vimwiki_list = [default_wiki]
+
+function! VimwikiLinkHandler(link)
+  let link = a:link
+  if link =~# '^vfile:'
+    let link = expand(link[6:])
+  else
+    return 0
+  endif
+
+  if !isdirectory(link) && !filereadable(link)
+    echomsg 'Vimwiki Error: Unable to resolve link!'
+    return 0
+  endif
+
+  if isdirectory(link)
+    execute 'NERDTree ' . fnameescape(link)
+  else
+    execute 'edit ' . fnameescape(link)
+  endif
+  return 1
+endfunction
+
+" Disable conceal cursor for now (see how it works as is)
+"augroup VimWikiConfig
+"autocmd!
+"autocmd BufEnter *.wiki setl concealcursor=c
+"augroup END
 
 " Indent guides (activate with <leader>ig)
 let g:indent_guides_guide_size = 1

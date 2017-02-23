@@ -4,16 +4,23 @@
 #
 # Rooms:
 #  - create_room
+#  - create_inn
+#  - create_post
+#  - create_bank
+#  - create_chapel
+#  - create_shop
+#  - create_storeroom
+#  - create_training
 #
 # Armours:
 #  - create_armour
-#  - create_magic_armour
+#  - create_magical_armour
 #  - create_wearable
 #
 # Weapons:
 #  - create_weapon
 #  - create_poison_weapon
-#  - create_magic_weapon
+#  - create_magical_weapon
 #
 # Containers:
 #  - create_backpack
@@ -21,15 +28,34 @@
 #  - create_chest
 #  - create_trapped_chest
 #  - herbal jar?
+#
 # Rope:
 #  - create_rope
 #
 # Light sources:
 #  - create_torch
 #
+# Valuables:
+#  - create_gem
+#
+# Scrolls and books:
+#  - create_scroll-
+#
+# Herbs and potions
+#  - create_potion-
+#  - create_herb-
+#
 # Misc items:
+#  - create_object
 #  - create_food
 #  - create_drink
+#  - create_message (carried by messengers)
+#  - create_holdable
+# 
+# NPCs:
+#  - create_monster
+#  - create_creature
+#  - create_messenger
 #
 # Utilities:
 #  - qwrap
@@ -49,7 +75,7 @@ def qwrap(text, clean = False):
   r = textwrap.wrap(r, 60, initial_indent=" \"",
 					subsequent_indent="\t\t\t+ \"",
 					expand_tabs=False)
-  r = "\"\n".join(r)
+  r = " \"\n".join(r)
   if not clean and len(r) > 0 : r += "\\n"
   r = r + "\"" if r != "" else "\"\""
   return r
@@ -58,9 +84,11 @@ def clean_description():
   if snip.tabstop != 0 : return
   r = re.compile(r'/\*-{|}-\*/')
   indices = [ i for i, line in enumerate(snip.buffer) if r.search(line) ]
-  if len(indices) != 2 : return
-  [ s, e ] = indices
-  snip.buffer[s : e+1] = []
+  if len(indices) % 2 != 0 : return
+  for i in xrange(len(indices), 0, -2):
+	  [ s, e ] = indices[i-2:i]
+	  snip.buffer[s : e+1] = []
+
 endglobal
 # }}}
 
@@ -84,6 +112,7 @@ endsnippet
 #
 # Rooms
 # {{{
+post_jump "clean_description()"
 snippet create_room "Create a room" b
 /*
  * Function name: create_room
@@ -93,32 +122,606 @@ public void
 create_room()
 {
 	set_short("${1:Short description}");
-	set_long("$2\n");
-	
-	add_item(({ $3 }), "$4\n");
 
-	add_prop(ROOM_I_INSIDE, ${5:0-1});
+	/*-{
+		Description: 
+					${2:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])`);
+
+	add_item(({ ${3:Item} }), "${4:Item description}\n");
+
+	add_cmd_item(({ "${5:Item}" }), ({ "${6:Command}" }), 
+		({ "${7:Effect description}" }));
+
+	add_prop(ROOM_I_INSIDE, ${8:0-1});
+	add_prop(ROOM_I_LIGHT, ${9:1});	  
+	add_prop(ROOM_I_TYPE, ROOM_${10:NORMAL|IN_AIR|IN_WATER|UNDER_WATER|BEACH});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${11:0-1});
+	add_prop(ROOM_M_NO_ATTACK, ${12:0-1});
+
+	add_prop(OBJ_S_SEARCH_FUN, "search");
+
+	add_exit("${13:relative/path/to/other/room}", 
+			"${14:direction}", "${15:VBFC}", ${16:fatigue});
+
+	// Room content
+	add_npc("${17:/path/to/npc}", ${18:1 - count}, ${19:&->arm_me()});
+	add_object("${20:/path/to/object}", ${21:1 - count}, ${22:&->obj_prep()});
+
 	reset_room();
 }
 
 /*
- * Function name: create_room
- * Description	: setup room content
+ * Function name: reset_room
+ * Description	: initialize room state
  */
 public void
 reset_room()
 {
-	if (!${6})
+	::reset_room();
+}
+
+public void
+init()
+{
+	::init();
+
+	add_action(act_fn, "action_name");
+}
+
+/*
+ * Function name: search
+ * Argument     : object player - player conducting the search
+ * Argument     : string item - item that is being searched
+ * Description  : respond to player search action
+ * Returns      : "text" - the "text" will be printed to the player to inform him of the
+ *                         result of the search (whether it is good or bad).
+ *                ""     - no text will be printed to the player. This assumes that you have
+ *                         taken care of the message within your routine.
+ *                0      - the search failed. A default fail message will be printed.
+ */
+public string
+search(object player, object item)
+{
+	return 0;
+}
+
+/*
+ * Function name: block_action
+ * Description:   Called to see if this room wants to prevent a living
+ *				  inside from performing an action.  This will be called
+ *				  once for each target.
+ * Arguments:	  string cmd - the command name
+ *				  object actor - the actor
+ *				  object target - the target of the action
+ *				  int cmd_attrs - the command's attributes (from cmdparse.h)
+ * Returns:		  0 - Command allowed
+ *				  1 - Command blocked without a failure message
+ *				  string - Command blocked, use return value as failure message
+ */
+public mixed
+block_action(string cmd, object actor, object target, int cmd_attrs)
+{
+	/* The room prevents high activity actions */
+	if (cmd_attrs & ACTION_HACTIVITY)
 	{
-		$6 = clone_object("/std/object");
-		$6->move(this_object(), 1);
+		return "The tunnel is too tight to move around in.\n";
 	}
 
-	::reset_room();
+	/* All other actions use the default */
+	return ::block_action(cmd, actor, target, cmd_attrs);
 }
 $0
 endsnippet
+
+post_jump "clean_description()"
+snippet create_inn "Create inn" b
+/*
+ * Function name: create_room
+ * Description  : $1
+ */
+void
+create_room()
+{
+	set_short("${1:Wild Boar Inn}");
+
+	/*-{
+		Description: 
+					${2:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])`);
+
+	add_item(({ ${3:bar} }), 
+		"${4:A nice looking wooden bar with a menu on it.}\n");
+
+	add_cmd_item(({ "${5:menu}" }), ({ "${6:read}" }), "${7:@@read_menu}");
+
+	add_prop(ROOM_I_INSIDE, ${8:1});
+	add_prop(ROOM_I_LIGHT, ${9:1});
+	add_prop(ROOM_I_TYPE, ROOM_${10:NORMAL});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${11:1});
+	add_prop(ROOM_M_NO_ATTACK, ${12:0});
+
+	add_exit("${13:/path/to/inn/exit}", 
+			"${14:out}", "${15:VBFC}");
+
+	add_npc("${17:/path/to/bartender}", ${18:1}, ${19:&->equip_me()});
+
+	add_drink( ({ ${20:"beer", "beers", "small", "small beer"} }),
+	"${21:beer}", "${22:small}", 
+	${23:100 - soft amount}, ${24:20 - alco ammount}, ${25:12 - price}, 
+	${26:0 - special short description}, ${27:0 - plural spec short description},
+	"${28:It's a small but refreshing beer.}\n", 0);
+
+	add_food( ({ ${29:"potatoes", "spiced", "plate of spiced potatoes",
+		 "plate", "plates"} }),
+	"${30:potatoes}", "${31:spiced}", ${32:110 - weight}, ${33:110 - price}, 
+	${34:"plate of spiced potatoes"}, ${35:"plates of spiced potatoes"},
+	"${36:They look very tasty.}\n", 0);
+}
+
+/*
+ * Function name: read_menu
+ * Description:   Read the menu
+ */
+int
+read_menu(string str)
+{
+	write("---------------------------------------" +
+		"	Small beer				   12 cc\n" +
+		"	Plate of spiced potatoes  210 cc\n" +
+		"---------------------------------------\n\n");
+	return 1;
+}
+
+/*
+ * Function name: init
+ * Description:   Initalize the pub actions
+ */
+void
+init()
+{
+	::init();
+	init_pub();
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet create_post "Create post office" b
+/*
+ * Function name: create_room
+ * Description  : $1
+ */
+void
+create_room()
+{
+	set_short("${1:Post Office of Gelan}");
+
+	/*-{
+		Description: 
+					${2:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])` + 
+			get_std_use());
+
+	add_item(({ ${3:"elves", "elf"} }),
+		"${4:The elves are hurriedly sorting all the mail that " +
+		"needs to be delivered. They don't have time to talk " +
+		"to you.}\n");
+
+	add_item (({ ${5:"head postmaster", "postmaster"} }),
+		"${6:He's supervising his employees, making sure " +
+		"they do their work properly.}\n");
+
+	add_prop(ROOM_I_INSIDE, ${7:1});
+	add_prop(ROOM_I_LIGHT, ${8:1});
+	add_prop(ROOM_I_TYPE, ROOM_${9:NORMAL});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${10:1});
+	add_prop(ROOM_M_NO_ATTACK, ${11:0});
+
+	add_exit("${12:/path/to/post/office/exit}", 
+			"${13:out}", "${14:VBFC}");
+
+	add_npc("${16:/path/to/postmaster}", ${17:1}, ${18:&->equip_me()});
+}
+
+/*
+ * Function name: init
+ * Description:   Initalize the post office actions
+ */
+void
+init()
+{
+	::init();
+	post_init();
+}
+
+/*
+ * Function name: leave_inv
+ * Description:   return the post office folder
+ */
+void
+leave_inv(object ob, mixed to)
+{
+	::leave_inv(ob, to);
+	post_leave_inv(ob, to);
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet create_bank "Create a bank" b
+/*
+ * Function name: create_room
+ * Description  : $1
+ */
+void
+create_room()
+{
+	set_short("${1:The Bank Office}");
+
+	/*-{
+		Description: 
+					${2:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])`);
+
+	add_item( ({ ${3:"sign", "instructions"} }), ${4:standard_bank_sign});
+	add_cmd_item( ({ ${5:"sign", "instructions"} }), "${6:read}", ${7:standard_bank_sign});
+
+	add_prop(ROOM_I_INSIDE, ${8:1});
+	add_prop(ROOM_I_LIGHT, ${9:1});
+	add_prop(ROOM_I_TYPE, ROOM_${10:NORMAL});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${11:1});
+	add_prop(ROOM_M_NO_ATTACK, ${12:0});
+
+	add_exit("${13:/path/to/bank/exit}", 
+			"${14:out}", "${15:VBFC}");
+
+	set_bank_fee(${16:30 - exchange fee [%]}); 
+	config_trade_data();
+
+	add_npc("${17:/path/to/banker}", ${18:1}, ${19:&->equip_me()});
+}
+
+/*
+ * Function name: init
+ * Description:   Initalize the bank actions
+ */
+void
+init()
+{
+	::init();
+	bank_init();
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet create_chapel "Create a chapel" b
+/*
+ * Function name: create_room
+ * Description	: $1
+ */
+void
+create_room()
+{ 
+	set_short("${1:The Chapel}");
+
+	/*-{
+		Description: 
+					${2:Long description, suggest <meditate> command}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])`);
+
+	add_prop(ROOM_I_INSIDE, ${3:1});
+	add_prop(ROOM_I_LIGHT, ${4:2});
+	add_prop(ROOM_I_TYPE, ROOM_${5:NORMAL});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${6:1});
+	add_prop(ROOM_M_NO_ATTACK, ${7:"The feeling of peace is too great here.\n"});
+
+	add_exit("${8:/path/to/chapel/exit}", 
+			"${9:out}", "${10:VBFC}");
+
+	add_npc("${11:/path/to/cleric}", ${12:1}, ${13:&->equip_me()});
+}
+
+/*
+ * Function name: gs_hook_start_meditating
+ * Description	: describe meditation experience
+ */
+void
+gs_hook_start_meditating()
+{
+	/*-{
+		Description: 
+					${14:You kneel before the altar of Paladine and close your eyes. A 
+					feeling of great ease and self control falls upon you. You block 
+					of your senses and concentrate solely upon your own mind. You 
+					feel Paladine with you and he gives you the power to <estimate> 
+					your different stats and <set> the learning preferences at your 
+					own desire. Just <rise> when you are done meditating.}
+	}-*/
+	write(`!p snip.rv=qwrap(t[14])`);
+	say(QCTNAME(this_player()) + "${15: kneels down before the altar.}\n");
+}
+
+/*
+ * Function name: gs_hook_rise
+ * Description	: $1
+ */
+int
+gs_hook_rise()
+{
+	/*-{
+		Description: 
+					${16:As if ascending from a great depth, you rise to the surface of 
+					your consciousness. You exhale and feel very relaxed as you get 
+					up and leave the altar.}
+	}-*/
+	write(`!p snip.rv=qwrap(t[16])`);
+	say(QCTNAME(this_player()) + "${17: rises from the altar.}\n");
+}
+
+/*
+ * Function name: init
+ * Description:   Initalize the chapel actions
+ */
+void
+init()
+{
+	::init();
+	init_guild_support();
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet create_shop "Create a shop" b
+/*
+ * Function name: create_room
+ * Description	: $1
+ */
+void
+create_room()
+{
+	set_short("${1:The Trading Outpost}");
+
+	/*-{
+		Description: 
+					${2:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])`);
+
+	add_item("${3:counter}", "${4:It is a wooden counter.}\n");
+
+	add_item( ({ ${5:"door", "doors"} }),
+		"${6:The doors are made of the same wood as the rest of the "
+		+ "cabinet. They are secured with iron bands and closed shut!}\n");
+
+	add_cmd_item( ({ ${7:"cabinet", "door", "doors"} }),
+		({ ${8:"open", "enter", "unlock"} }),
+		"${9:The doors of the cabinet are closed and fermly locked. There "
+		+ "is no way you can open the doors so do not even think about "
+		+ "entering the cabinet.}\n");
+
+	add_prop(ROOM_I_INSIDE, ${10:1});
+	add_prop(ROOM_I_LIGHT, ${11:1});
+	add_prop(ROOM_I_TYPE, ROOM_${12:NORMAL});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${13:1});
+	add_prop(ROOM_M_NO_ATTACK, ${14:0});
+
+	add_exit("${15:/path/to/storeroom}", "${16:storeroom}", 0);
+
+	add_exit("${17:/path/to/shop/exit}", 
+			"${18:out}", "${19:VBFC}");
+
+	add_npc("${20:/path/to/merchant}", ${21:1}, ${22:&->equip_me()});
+
+	config_default_trade();
+	set_money_give_max(1000);
+	set_store_room(${23:/path/to/storeroom});
+}
+
+/*
+ * Function name: init
+ * Description:   Initalize the shop actions
+ */
+void
+init()
+{
+	::init();
+	init_shop();
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet create_storeroom "Create a store room" b
+/*
+ * Function name: create_room
+ * Description	: $1
+ */
+void
+create_room() 
+{
+	set_short("${1:Storeroom of the shop}");
+
+	/*-{
+		Description: 
+					${2:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])`);
+
+	add_prop(ROOM_I_INSIDE, ${3:1});
+	add_prop(ROOM_I_LIGHT, ${4:1});
+	add_prop(ROOM_I_TYPE, ROOM_${5:NORMAL});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${6:0});
+	add_prop(ROOM_M_NO_ATTACK, ${7:0});
+
+	add_exit("${8:/path/to/storeroom/exit}", "${9:out}");
+
+	set_default_stock(({ 
+		"${10:/path/to/item1}", ${11:1 - item1_qty}, 
+		"${12:/path/to/item2}", ${13:4 - item2_qty}, 
+	}));
+	reset_store();
+}
+
+/*
+ * Function name: enter_inv
+ * Description  : You should always call store_update() if an object enters 
+ *                the storeroom to update it and let it be added to the stock
+ */
+void
+enter_inv(object obj, object from)
+{
+	::enter_inv(obj, from);
+	store_update(obj);
+}
+
+/*
+ * Function name: reset_room
+ * Description  : To have the default stock replenished at reset, 
+ *                define the function reset_room() to call reset_store()
+ */
+void
+reset_room()
+{
+	reset_store();
+}
+endsnippet
+
+post_jump "clean_description()"
+snippet create_training "Create a training room" b
+void set_up_skills();
+
+/*
+ * Function name: create_room
+ * Description	: $1
+ */
+void
+create_room()
+{ 
+	set_short("${1:The Training Room}");
+
+	/*-{
+		Description: 
+					${2:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[2])`);
+
+	add_item("sign", "");
+	add_cmd_item(({"words", "sign"}), "read", "@@read");
+
+	add_item("${3:sign}", "${4:There are words on it, why not read it?}\n");
+
+	add_cmd_item( ({ ${5:"words", "sign"} }), ({ ${6:"read"} }), "${7:"@@read"});
+
+	add_prop(ROOM_I_INSIDE, ${8:1});
+	add_prop(ROOM_I_LIGHT, ${9:1});
+	add_prop(ROOM_I_TYPE, ROOM_${10:NORMAL});
+
+	add_prop(ROOM_I_NO_ALLOW_STEED, ${11:1});
+	add_prop(ROOM_M_NO_ATTACK, ${12:0});
+
+	add_exit("${13:/path/to/storeroom}", "${14:storeroom}", 0);
+
+	add_exit("${15:/path/to/training/room/exit}", 
+			"${16:out}", "${17:VBFC}");
+
+	add_npc("${18:/path/to/trainer}", ${19:1}, ${20:&->equip_me()});
+
+	create_skill_raise();
+	set_up_skills();
+}
+
+/*
+ * Function name: read
+ * Description:   read the training instructions
+ */
+int
+read()
+{
+
+	/*-{
+		Description: 
+					${21:In here you can train rescueing, kicking and bashing skills. To
+					use them you do the commands 'rescue', 'ckick' or 'bash'. If you
+					rescue another being one of the living beings hitting on this
+					being will start hitting on you instead. 'ckick' stands for
+					combat kick, and if it's successful you will hurt your opponent.
+					You will have to wait a little between each kick. A bash works
+					just as a kick, but it hits harder and you have to wait a little
+					longer between each bash.
+					When you improve your skills here you will advance much quicker
+					than you do in normal guilds. And if you are intelligent you will
+					learn even quicker.}
+	}-*/
+	write(`!p snip.rv=qwrap(t[21])`);
+
+	return 1;
+}
+
+/*
+ * Function name: init
+ * Description:   Initalize the skill training actions
+ */
+void
+init()
+{
+	init_skill_raise();
+	::init();
+}
+
+void
+set_up_skills()
+{
+	sk_add_train(SS_${22:RESCUE}, "${23:rescue people when fighting}", "${24:rescue}", ${25:50}, ${26:100} );
+	sk_add_train(SS_${27:BASH}, "${28:bash an enemy}", "${29:bash}", ${30:100}, ${31:100} );
+}
+endsnippet
 # }}}
+
+
+#
+# Generic: object
+# {{{
+post_jump "clean_description()"
+snippet create_object "Create an object" b
+/*
+ * Function name: create_object
+ * Description  : $5
+ */
+void
+create_object()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	add_prop(OBJ_I_WEIGHT, ${11:Weight [g]});
+	add_prop(OBJ_I_VOLUME, ${12:Volume [ml]});
+	add_prop(OBJ_I_VALUE, ${13:Value [cc]});
+}
+endsnippet
+# }}}
+
 
 #
 # Armours and wearables
@@ -584,7 +1187,7 @@ $0
 endsnippet
 
 post_jump "clean_description()"
-snippet create_magic_weapon "Create magical weapon" b
+snippet create_magical_weapon "Create magical weapon" b
 /*
  * Function name: create_weapon
  * Description	: $5, magical, recoverable: ${7:(Yes/No)}
@@ -1194,17 +1797,259 @@ create_object()
 	add_prop(OBJ_I_VALUE, ${11:100});
 }
 endsnippet
-
-
 # }}}
 
 #
 # Rope
 # {{{
+post_jump "clean_description()"
+snippet create_rope "Create rope" b
+/*
+ * Function name: create_rope
+ * Description  : $5
+ */
+void
+create_rope()
+{
+	set_name("${1:rope}");
+	set_pname("${2:ropes}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+}
+endsnippet
 # }}}
 
 #
 # Message (for messengers)
+# {{{
+snippet create_message "Create message" b
+/*
+ * Function:    create_message
+ * Description: Default create method for a message object. All we
+ *              do here is customize the short description.
+ */
+public void
+create_message()
+{
+	set_short("${1:"message from " + query_sender()}.\n");
+}
+
+/*
+ * Function:	message_description
+ * Description: This function is what the message looks like when it is
+ *				"read" or "examine"d. Mask this function to customize
+ *				the presentation to the player.
+ * Returns:		string to be displayed
+ */
+public string
+message_description()
+{
+	return ${2:"The message from " + query_sender() + " reads:\n" +
+			query_message() + "\n"};
+}
+
+/*
+ * Function:	hook_message_destroyed
+ * Description: Hook method that gets called when a message is destroyed.
+ *				Mask this function to customize the message that players
+ *				will see.
+ * Arguments:	room   - room that the message is in
+ *				player - if not null, then this is the player that dropped
+ *						 the message, causing it to be destroyed.
+ */
+public varargs void
+hook_message_destroyed(object room, object player)
+{
+	tell_room(room, ${3:"The " + short() + " crumbles to dust, then blows away.\n"});
+}
+endsnippet
+# }}}
+
+#
+# Torch (or any other light source like lamp, candle, etc)
+# {{{
+post_jump "clean_description()"
+snippet create_torch "Create torch" b
+/*
+ * Function:    create_torch
+ * Description: $5
+ */
+void
+create_torch()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	set_strength(${9:2 - light strength});
+	set_timeout(${10:120 - timeout in seconds});
+
+	add_prop(OBJ_I_WEIGHT, ${11:1500});
+	add_prop(OBJ_I_VOLUME, ${12:500});
+	add_prop(OBJ_I_VALUE, ${13:5184});
+
+	set_keep(1);
+}
+
+string
+query_recover()
+{
+	return MASTER + ":" + query_torch_recover();
+}
+
+void
+init_recover(string arg)
+{
+	init_torch_recover(arg);
+}
+endsnippet
+# }}}
+
+#
+# Holdable item
+# {{{
+post_jump "clean_description()"
+snippet create_holdable "Create holdable item" b
+/*
+ * Function:    create_object
+ * Description: $5
+ */
+public void
+create_object()
+{
+	set_name("${1:name}");
+	set_pname("${2:${1/^(name)|(.*)$/(?1:plural:$2s)/}}");
+
+	set_adj("${3:first adjective}");
+	add_adj("${4:second adjective}");
+
+	set_short("${5:$4 $3 $1}");
+	set_pshort("${6:$4 $2}");
+
+	/*-{
+		Description: 
+					${8:Long description}
+	}-*/
+	set_long(`!p snip.rv=qwrap(t[8])`);
+
+	add_item(({ ${9:Detail} }), 
+			"${10:Detail to suggest magical nature of armour.}\n");
+
+	add_prop(OBJ_I_WEIGHT, ${11:1500});
+	add_prop(OBJ_I_VOLUME, ${12:500});
+	add_prop(OBJ_I_VALUE, ${13:5184});
+
+	set_keep(1);
+
+	add_prop(OBJ_M_NO_BUY, 
+		"Merchant nervously declines to buy so valuable item.");
+	
+	add_prop(MAGIC_AM_MAGIC, ({ ${14:Intensity(%):30}, "${15:enchantment}" }));
+
+	add_prop(MAGIC_AM_ID_INFO, ({
+	"${16:Identify 1 description. }", 10,		
+	"${17:Identify 2 description. }", 30,
+	"${18:Identify 3 description. }", 50}));
+
+	add_prop(OBJ_S_WIZINFO,
+		"${19:Wizard description, include all magical effects, spawn "+
+		"location and monsters that own this armour.}\n");
+
+	set_slots(W_${20:ANYH});
+}
+
+/*
+ * Function name: hold
+ * Description:   This function is called to see if the item can be held.
+ * Returns:		  see /lib/holdable_item.c:hold
+ */
+public mixed
+hold()
+{
+	int able_to_hold_item = 1;
+
+	// Test if able to hold the item
+	$0
+	if (able_to_hold_item)
+	{
+		write("As you hold the " + short() + " in your hand, " +
+			"a strange warmth pervades your body.\n");
+
+		// Add magic effect to holder
+
+		return 1;
+	}
+
+	write("You feel the " + short() + " resist your grasp.\n");
+	return -1;
+}
+
+/*
+ * Function name: release
+ * Description:   This function is called to see if the item can be released.
+ * Returns:		  see /lib/holdable_item.c:release
+ */
+public mixed
+release()
+{
+	int able_to_release = 0;
+
+	// Remove magic effect from holder
+
+	return able_to_release;
+}
+
+/* Function name: leave_env
+ * Description:   This function is called when the item moves from
+ *				  one environment to another.
+ * Arguments:	  object env - the environment being left
+ *				  object to  - the environment being entered
+ */
+public void
+leave_env(object env, object to)
+{
+	::leave_env(env, to);
+	holdable_item_leave_env(env, to);
+}
+
+/*
+ * Function name: appraise_object
+ * Description:   This is called when someone appraises this item.
+ *				  We want to mask it to add a message telling the
+ *				  appraiser that the item can be held.
+ */
+public void
+appraise_object(int num)
+{
+	::appraise_object(num);
+	appraise_holdable_item();
+}
+endsnippet
+# }}}
+
+#
+# Herbs and potions (they work almost the same)
 # {{{
 # }}}
 
@@ -1213,4 +2058,9 @@ endsnippet
 # {{{
 # }}}
 
-# vim: foldmethod=marker
+#
+# NPCs (humanoids, creatures, messengers)
+# {{{
+# }}}
+
+# vim: sts=4:ts=4:sw=4:foldmethod=marker

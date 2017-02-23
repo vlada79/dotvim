@@ -28,7 +28,8 @@ syn cluster	lpcKeywdGrp	contains=lpcConditional,lpcLabel,lpcOperator,lpcRepeat,l
 
 syn keyword	lpcConditional	if else switch
 syn keyword	lpcLabel	case default
-syn keyword	lpcOperator	catch efun in inherit
+syn keyword	lpcOperator	catch efun in
+syn keyword     lpcKeyword      inherit
 syn keyword	lpcRepeat	do for foreach while
 syn keyword	lpcStatement	break continue return
 
@@ -665,6 +666,7 @@ if version >= 508 || !exists("did_lpc_syn_inits")
   HiLink lpcSpecial		LineNr
   HiLink lpcTodo		Todo
   HiLink lpcType		Type
+  HiLink lpcKeyword             Keyword
 
   delcommand HiLink
 endif

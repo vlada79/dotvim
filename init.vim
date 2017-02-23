@@ -10,8 +10,9 @@ Plug 'VundleVim/Vundle.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
-"Plugin 'tsaleh/vim-matchit'
+Plug 'tpope/vim-repeat'
 Plug 'duff/vim-bufonly'
+Plug 'neomake/neomake'
 
 " Ruby powertools
 Plug 'vim-ruby/vim-ruby'
@@ -47,6 +48,7 @@ Plug 'xolox/vim-notes'
 Plug 'xterm-color-table.vim'
 Plug 'vim-scripts/CSApprox'
 Plug 'gerw/vim-HiLinkTrace'
+Plug 'chrisbra/Colorizer' " Show color codes & colornames
 
 " Themes
 Plug 'jellybeans.vim'
@@ -62,8 +64,6 @@ Plug 'Ron89/thesaurus_query.vim'
 " Productivity tools
 Plug 'ctrlp.vim'
 Plug 'The-NERD-tree'
-"Plug 'Shougo/neocomplete.vim'
-"Plug 'Shougo/neoinclude.vim'
 Plug 'SirVer/ultisnips'
 
 " Golden ratio resizing (should fork and fix this)
@@ -78,6 +78,7 @@ Plug 'vim-scripts/AnsiEsc.vim'
 " Code navigation through tags/cscope
 Plug 'hari-rangarajan/CCTree'
 Plug 'majutsushi/tagbar'
+Plug 'tomtom/quickfixsigns_vim'
 
 call plug#end()
 
@@ -158,19 +159,21 @@ colorscheme lovecraft
 
 set nospell spelllang=en_us
 
-
-nnoremap <silent> <Leader><Tab> :TagbarToggle<CR>
-nnoremap <silent> <F12> :NERDTreeToggle<CR>
-nnoremap <F2> :cprev<CR>
-nnoremap <F3> :cnext<CR>
-nnoremap <F4> :cw<CR>
+nnoremap <silent> <F2>    :cprev<CR>
+nnoremap <silent> <F3>    :cnext<CR>
+nnoremap <silent> <F4>    :cw<CR>
+nnoremap <silent> <F5>    :silent! make! <bar> redraw!<CR>
+nnoremap <silent> <F8>    :QuickfixsignsToggle<CR>
 
 " BiG key maps
-" nnoremap <silent> <Tab> :bn<cr>
-" nnoremap <silent> <S-Tab> :bp<cr>
-" nnoremap <silent> <Enter> :cn<cr>
-" nnoremap <silent> <S-Enter> :cp<cr>
 nnoremap <silent> <C-Enter> :e $MYVIMRC<cr>
+nnoremap <silent> <Leader>vim :e $MYVIMRC<cr>
+
+" Remap up/down keys when popup menu appears
+inoremap <expr><C-d> pumvisible() ? "\<PageDown>" : "\<C-d>"
+inoremap <expr><C-u> pumvisible() ? "\<PageUp>"   : "\<C-u>"
+inoremap <expr><C-j> pumvisible() ? "\<Down>"     : "\<C-j>"
+inoremap <expr><C-k> pumvisible() ? "\<Up>"       : "\<C-k>"
 
 " Set passive FTP mode
 "Plugin 'Decho' " Debug netrw output for FTP edit
@@ -190,14 +193,25 @@ if !has('gui_running')
   colorscheme lovecraft
 end
 
+" NERDTree configuration
+let NERDTreeDirArrows = 1
+let NERDTreeQuitOnOpen = 1
+
+" NERDTree toggle
+nnoremap <silent> <F12> :NERDTreeToggle<CR>
+nnoremap <silent><expr> <Leader><Tab> exists('t:NERDTreeBufName') ? (expand('%') != t:NERDTreeBufName ? ":NERDTreeFind<CR>" : ":NERDTreeClose<CR>" ) : ":NERDTreeFind<CR>"
+
 " CtrlP configuration
 let g:ctrlp_cmd = 'CtrlPMRUFiles'
 
 " Tagbar (:TagbarToggle)
-let g:tagbar_autoclose = 1
-let g:tagbar_autofocus = 1
-let g:tagbar_zoomwidth = 0
+let g:tagbar_autoclose   = 1
+let g:tagbar_autofocus   = 1
+let g:tagbar_zoomwidth   = 0
 let g:tagbar_autoshowtag = 1
+
+" Tagbar toggle
+nnoremap <silent> <Leader><CR>  :TagbarToggle<CR>
 
 " Goldenratio setup (:GoldenRatioToggle and :GoldenRatioResize)
 "let g:golden_ratio_exclude_nonmodifiable = 1
@@ -207,14 +221,24 @@ let g:tagbar_autoshowtag = 1
 let g:indent_guides_guide_size = 1
 let g:indent_guides_start_level = 2
 
+" Autocompletion
+inoremap <expr><C-Space> '<C-x><C-o>'
+
 " UltiSnips config
-let g:UltiSnipsSnippetsDir =  "~/.vim/ultisnips"
-let g:UltiSnipsSnippetDirectories = [ "ultisnips" ]
-let g:UltiSnipsExpandTrigger =       "<tab>"
-let g:UltiSnipsListSnippets =        "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger =  "<tab>"
+let g:UltiSnipsSnippetsDir         = "~/.vim/ultisnips"
+let g:UltiSnipsSnippetDirectories  = [ "ultisnips" ]
+let g:UltiSnipsExpandTrigger       = "<tab>"
+let g:UltiSnipsListSnippets        = "<F11>"
+let g:UltiSnipsJumpForwardTrigger  = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
+" Quickfixsign config
+set signcolumn=auto
+let g:quickfixsigns_classes = [ 'qfl' ]
+let g:quickfixsigns_use_dummy = 0
+sign define QFS_QFL icon= text=✗✗ texthl=Cursor
+"sign define QFS_QFL icon= text=☢✗ texthl=Cursor
+"sign define QFS_QFL icon= text=⚡ texthl=Cursor
 
 " Log management
 function! ShowLog(file)

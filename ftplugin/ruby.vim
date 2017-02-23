@@ -17,4 +17,5 @@ endfunction
 setlocal foldmethod=expr
 setlocal foldexpr=RubyMethodFold(v:lnum)
 setlocal foldlevelstart=1
+setlocal nofoldenable
 

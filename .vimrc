@@ -16,7 +16,16 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-repeat'
-Plugin 'duff/vim-bufonly'
+Plugin 'tpope/vim-speeddating'
+Plugin 'tpope/vim-jdaddy'
+
+" Need some time to look into sessions 
+"Plugin 'tpope/vim-obsession' 
+
+" Autoformat
+Plugin 'Chiel92/vim-autoformat'
+
+"Plugin 'duff/vim-bufonly'
 Plugin 'neomake/neomake'
 
 " Ruby powertools
@@ -28,26 +37,17 @@ Plugin 'noprompt/vim-yardoc'
 Plugin 'klen/python-mode'
 Plugin 'glench/vim-jinja2-syntax'
 
-" Coffee
-Plugin 'kchmck/vim-coffee-script'
-
 " JSON
 Plugin 'elzr/vim-json'
 
 " HTML/CSS
-"Plugin 'mattn/emmet-vim' " Yet to test it out
+Plugin 'mattn/emmet-vim' " Yet to test it out
 Plugin 'vim-scripts/Better-CSS-Syntax-for-Vim'
 Plugin 'ap/vim-css-color'
 
 " Git powertools
 Plugin 'tpope/vim-git'
 Plugin 'tpope/vim-fugitive'
-
-" Experimental
-Plugin 'mattn/webapi-vim'
-Plugin 'L9'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-notes'
 
 " Colorscheme tools
 Plugin 'xterm-color-table.vim'
@@ -229,36 +229,9 @@ nnoremap <silent> <Leader><CR>  :TagbarToggle<CR>
 " Vimwiki config
 let g:vimwiki_listsyms = ' .oOX'
 let g:vimwiki_hl_headers = 1
-let default_wiki = {}
-let default_wiki.path = '~/.notes/'
-let g:vimwiki_list = [default_wiki]
-
-function! VimwikiLinkHandler(link)
-  let link = a:link
-  if link =~# '^vfile:'
-    let link = expand(link[6:])
-  else
-    return 0
-  endif
-
-  if !isdirectory(link) && !filereadable(link)
-    echomsg 'Vimwiki Error: Unable to resolve link!'
-    return 0
-  endif
-
-  if isdirectory(link)
-    execute 'NERDTree ' . fnameescape(link)
-  else
-    execute 'edit ' . fnameescape(link)
-  endif
-  return 1
-endfunction
-
-" Disable conceal cursor for now (see how it works as is)
-"augroup VimWikiConfig
-"autocmd!
-"autocmd BufEnter *.wiki setl concealcursor=c
-"augroup END
+let s:default_wiki = {}
+let s:default_wiki.path = '~/.notes/'
+let g:vimwiki_list = [s:default_wiki]
 
 " Indent guides (activate with <leader>ig)
 let g:indent_guides_guide_size = 1
@@ -283,17 +256,8 @@ let g:quickfixsigns_use_dummy = 0
 sign define QFS_QFL icon= text=⚡ texthl=Cursor
 nnoremap <F8> :QuickfixsignsToggle<CR>
 
-" Log management
-function! ShowLog(file)
-  botright vnew
-  silent execute "%r! tail -100 " . shellescape(expand(a:file))
-  setlocal readonly
-  setlocal nomodifiable
-  setlocal buftype=nofile
-  setlocal bufhidden=delete
-  setlocal nobuflisted
-  wincmd p
-endfunction
+" Load vimrc functions
+runtime autoload/vimrc.vim
 
 " Reload .vimrc after each save
 augroup VimRc

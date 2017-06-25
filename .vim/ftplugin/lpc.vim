@@ -522,6 +522,8 @@ if has('nvim')
   command! -buffer Genesis :split enew | terminal ~/genesis/mud/connect.sh
 endif
 
+setlocal commentstring=//\ %s
+
 " TODO: 
 "
 " + CleverTab conflicts with UltiSnips
@@ -534,13 +536,13 @@ endif
 "   - snippet completition is distinct from tab completion (which is better)
 "
 " + Build script (LPC)
-"   - interobject build dependencies
-"   - clone, destruct, delay commands
-"   - watch directory
-"   - watch objects
+"   + interobject build dependencies
+"   + clone, destruct, delay commands
+"   + watch directory
+"   + watch objects
 "
 " + UltiSnips for all objects
-"   - somewhat covered (needs more testing)
+"   + somewhat covered (needs more testing)
 
 " indent sane options: -bad -bap -sc -bl -bli0 -cli0 -cbi4 -ss -di4 -i4 -hnl -nbbo -npcs -cs -lpc*
 

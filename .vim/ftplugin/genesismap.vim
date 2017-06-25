@@ -32,7 +32,11 @@ endfunction
 function! GmapSyntaxItem()
   let l:synids = synstack(line('.'), col('.'))
 
-  return synIDattr(l:synids[-1], 'name')
+  if len(l:synids) > 0
+    return synIDattr(l:synids[-1], 'name')
+  else
+    return ''
+  endif
 endfunction
 
 
@@ -176,7 +180,7 @@ function! GmapCompareCoords(a, b)
 endfunction
 
 function! GmapGetRoomCoords()
-  if CurrentSection() != 'gmapAsciiSection'
+  if GmapCurrentSection() != 'gmapAsciiSection'
     return 0
   endif
 
@@ -202,7 +206,7 @@ function! GmapGetRoomCoords()
 endfunction
 
 function! GmapNextRoom()
-  if CurrentSection() != 'gmapAsciiSection'
+  if GmapCurrentSection() != 'gmapAsciiSection'
     return 0
   endif
 
@@ -228,7 +232,7 @@ function! GmapNextRoom()
 endfunction
 
 function! GmapPrevRoom()
-  if CurrentSection() != 'gmapAsciiSection'
+  if GmapCurrentSection() != 'gmapAsciiSection'
     return 0
   endif
 
@@ -285,3 +289,5 @@ nnoremap <silent> <buffer> <leader>t :call GmapGetRoomList()<CR>
 nnoremap <silent> <buffer> <Tab> :call GmapNextRoom()<CR>
 nnoremap <silent> <buffer> <S-Tab> :call GmapPrevRoom()<CR>
 
+setlocal foldmethod=syntax
+setlocal foldlevel=0

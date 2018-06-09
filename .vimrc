@@ -17,7 +17,6 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-speeddating'
-Plugin 'tpope/vim-jdaddy'
 
 " Need some time to look into sessions 
 "Plugin 'tpope/vim-obsession' 
@@ -25,19 +24,37 @@ Plugin 'tpope/vim-jdaddy'
 " Autoformat
 Plugin 'Chiel92/vim-autoformat'
 
+" CSV support
+Plugin 'chrisbra/csv.vim'
+
 "Plugin 'duff/vim-bufonly'
 Plugin 'neomake/neomake'
 
 " Ruby powertools
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-bundler'
+Plugin 'tpope/vim-rvm'
 Plugin 'noprompt/vim-yardoc'
+Plugin 'AndrewRadev/splitjoin.vim' " gJ / gS
 
 " Python
 Plugin 'klen/python-mode'
 Plugin 'glench/vim-jinja2-syntax'
 
+" Javascript
+" (check config in ~/.vim/ftplugin/javascript.vim)
+Plugin 'vim-node'
+Plugin 'sidorares/node-vim-debugger'
+Plugin 'ternjs/tern_for_vim'
+Plugin 'jshint.vim'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'geekjuice/vim-mocha'
+
+" Log file syntax
+Plugin 'dzeban/vim-log-syntax'
+
 " JSON
+Plugin 'tpope/vim-jdaddy' " JSON pretty print and JSON text objects
 Plugin 'elzr/vim-json'
 
 " HTML/CSS
@@ -45,9 +62,13 @@ Plugin 'mattn/emmet-vim' " Yet to test it out
 Plugin 'vim-scripts/Better-CSS-Syntax-for-Vim'
 Plugin 'ap/vim-css-color'
 
+" Handlebars/mustache templates
+Plugin 'vlada79/vim-mustache-handlebars'
+
 " Git powertools
-Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive' " Git helper
+Plugin 'tpope/vim-rhubarb' " Github helpers
+Plugin 'tpope/vim-git' " :DiffGitCached
 
 " Colorscheme tools
 Plugin 'xterm-color-table.vim'
@@ -70,14 +91,12 @@ Plugin 'Ron89/thesaurus_query.vim'
 Plugin 'ctrlp.vim'
 Plugin 'The-NERD-tree'
 Plugin 'SirVer/ultisnips'
+Plugin 'skywind3000/asyncrun.vim'
 
 " Org tools
 Plugin 'vimwiki'
 Plugin 'blindFS/vim-taskwarrior'
-Plugin 'tbabej/taskwiki'
-
-" Golden ratio resizing (should fork and fix this)
-"Plugin 'roman/golden-ratio'
+"Plugin 'tbabej/taskwiki'
 
 " Ascii Art
 Plugin 'DrawIt'
@@ -91,6 +110,9 @@ Plugin 'majutsushi/tagbar'
 Plugin 'tomtom/quickfixsigns_vim'
 
 call vundle#end()
+
+" Enable matchit for ruby do ... end
+runtime macros/matchit.vim
 
 filetype plugin on
 filetype indent on
@@ -130,15 +152,15 @@ set concealcursor=c
 set laststatus=2
 
 " Status line for Lovecraft scheme 
-" (relies on User1, User2 and User3 highlight groups)
-set statusline=%<%1*%t%*\ %20.30(%{&ff}\ %{&fenc}\ %{&ft}%)\ %2*%10.40(%h%w%m%)%*%=(%3*%c%*,%3*%l%*)%3*%5.5p%*%%\ %*
+" (relies on User1, User2, User3 and User 4 highlight groups)
+set statusline=%<%1*%t%*\ %20.50(%{&ff}\ %{&fenc}\ %{&ft}\ %4*%{fugitive#head()}%*%)%2*%10.40(%h%w%m%)%*%=(%3*%c%*,%3*%l%*)%3*%5.5p%*%%\ %*
 
 " Colorless statusline
 "set statusline=%<%t\ %20.30(%{&ff}\ %{&fenc}\ %{&ft}%)\ %10.40(%h%w%m%)%=(%c,%l)%5.5p%%\ 
 
 set directory=/tmp
 set backupdir=/tmp
-set tags=~/rezon/hermes/tags
+set tags=./tags;$HOME
 
 " cscope setup
 if has("cscope")
@@ -175,6 +197,7 @@ nnoremap <silent> <F4>    :cw<CR>
 nnoremap <silent> <F5>    :silent! make! <bar> redraw!<CR>
 
 " BiG key maps
+let mapleader=" "
 nnoremap <silent> <C-Enter> :e $MYVIMRC<cr>
 nnoremap <silent> <Leader>vim :e $MYVIMRC<cr>
 
@@ -254,7 +277,7 @@ let g:quickfixsigns_classes = [ 'qfl' ]
 let g:quickfixsigns_use_dummy = 0
 "sign define QFS_QFL icon= text=☢✗ texthl=Cursor
 sign define QFS_QFL icon= text=⚡ texthl=Cursor
-nnoremap <F8> :QuickfixsignsToggle<CR>
+nnoremap <Backspace> :QuickfixsignsToggle<CR>
 
 " Load vimrc functions
 runtime autoload/vimrc.vim

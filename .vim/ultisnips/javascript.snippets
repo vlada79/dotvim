@@ -1,0 +1,1942 @@
+snippet log.debug
+log.debug({
+	title: '$1', 
+	details: ${0:''}
+});
+endsnippet
+snippet nlapilog
+nlapiLogExecution('debug', '$1', ${0:''});
+endsnippet
+
+snippet suiteapp_scheduledscript
+<scheduledscript scriptid="customscript_">
+    <defaultfunction></defaultfunction>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <status>NOTSCHEDULED</status>
+            <title></title>
+        </scriptdeployment>
+    </scriptdeployments>
+</scheduledscript>
+endsnippet
+
+
+snippet scheduled
+/**
+ * @param {String} type Context Types: scheduled, ondemand, userinterface, aborted, skipped
+ * @returns {Void}
+ */
+function scheduled(type) {
+
+}
+endsnippet
+
+
+snippet ssp
+<html>
+<head>
+</head>
+<body>
+
+</body>
+</html>
+endsnippet
+
+
+snippet suiteapp_promotionsplugin
+<promotionsplugin scriptid="customscript_">
+    <loglevel>DEBUG</loglevel>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <status>TESTING</status>
+</promotionsplugin>
+endsnippet
+
+
+snippet ss_2_0_suitelet
+/**
+ * @NApiVersion 2.x
+ * @NScriptType Suitelet
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Definition of the Suitelet script trigger point.
+     *
+     * @param {Object} context
+     * @param {ServerRequest} context.request - Encapsulation of the incoming request
+     * @param {ServerResponse} context.response - Encapsulation of the Suitelet response
+     * @Since 2015.2
+     */
+    function onRequest(context) {
+
+    }
+
+    return {
+        onRequest: onRequest
+    };
+    
+});
+endsnippet
+
+
+snippet user_event_after_submit
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ * 
+ * @param {String} type Operation types: create, edit, delete, xedit,
+ *                      approve, cancel, reject (SO, ER, Time Bill, PO & RMA only)
+ *                      pack, ship (IF only)
+ *                      dropship, specialorder, orderitems (PO only) 
+ *                      paybills (vendor payments)
+ * @returns {Void}
+ */
+function userEventAfterSubmit(type){
+  
+}
+endsnippet
+
+
+snippet client_line_init
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @param {String} type Sublist internal id
+ * @returns {Void}
+ */
+function clientLineInit(type) {
+     
+}
+endsnippet
+
+
+snippet portlet
+/**
+ * @param {nlobjPortlet} portletObj Current portlet object
+ * @param {Number} column Column position index: 1 = left, 2 = middle, 3 = right
+ * @returns {Void}
+ */
+function portletName(portletObj, column) {
+
+}
+endsnippet
+
+
+snippet suiteapp_crmcustomfield
+<crmcustomfield scriptid="custevent_">
+    <accesslevel>2</accesslevel>
+    <fieldtype>TEXT</fieldtype>
+    <label></label>
+    <storevalue>T</storevalue>
+</crmcustomfield>
+endsnippet
+
+
+snippet suiteapp_templates
+<configuration>
+  <templates>
+    <template label="Center" defaultFilename="custcenter_.xml">
+      <types>
+        <files label="Center" bodyFilename="suiteapp_center.xml"/>
+      </types>
+    </template>
+    <template label="Center Category" defaultFilename="custcentercategory_.xml">
+      <types>
+        <files label="Center Category" bodyFilename="suiteapp_centercategory.xml"/>
+      </types>
+    </template>
+    <template label="Center Tab" defaultFilename="custcentertab_.xml">
+      <types>
+        <files label="Center Tab" bodyFilename="suiteapp_centertab.xml"/>
+      </types>
+    </template>
+    <template label="CRM Field" defaultFilename="custevent_.xml">
+      <types>
+        <files label="CRM Field" bodyFilename="suiteapp_crmcustomfield.xml"/>
+      </types>
+    </template>
+    <template label="Entity Field" defaultFilename="custentity_.xml">
+      <types>
+        <files label="Entity Field" bodyFilename="suiteapp_entitycustomfield.xml"/>
+      </types>
+    </template>
+    <template label="File" defaultFilename="">
+      <types>
+        <files label="File" bodyFilename="suiteapp_file.xml"/>
+      </types>
+    </template>
+    <template label="Folder" defaultFilename="">
+      <types>
+        <files label="Folder" bodyFilename="suiteapp_folder.xml"/>
+      </types>
+    </template>
+    <template label="Item Field" defaultFilename="custitem_.xml">
+      <types>
+        <files label="Item Field" bodyFilename="suiteapp_itemcustomfield.xml"/>
+      </types>
+    </template>
+    <template label="Item Number Field" defaultFilename="custitemnumber_.xml">
+      <types>
+        <files label="Item Number Field" bodyFilename="suiteapp_itemnumbercustomfield.xml"/>
+      </types>
+    </template>
+    <template label="Item Option Field" defaultFilename="custcol_.xml">
+      <types>
+        <files label="Item Option Field" bodyFilename="suiteapp_itemoptioncustomfield.xml"/>
+      </types>
+    </template>
+    <template label="List" defaultFilename="customlist_.xml">
+      <types>
+        <files label="List" bodyFilename="suiteapp_customlist.xml"/>
+      </types>
+    </template>
+    <template label="Other Custom Field" defaultFilename="custrecord_.xml">
+      <types>
+        <files label="Other Custom Field" bodyFilename="suiteapp_othercustomfield.xml"/>
+      </types>
+    </template>
+    <template label="Plug-in - Custom GL Lines" defaultFilename="customscript_.xml">
+      <types>
+        <files label="Plug-in - Custom GL Lines" bodyFilename="suiteapp_customglplugin.xml"/>
+      </types>
+    </template>
+    <template label="Plug-in - Custom Plug-in Type" defaultFilename="customscript_.xml">
+      <types>
+        <files label="Plug-in - Custom Plug-in Type" bodyFilename="suiteapp_plugintype.xml"/>
+      </types>
+    </template>
+    <template label="Plug-in - Custom Plug-in Type" defaultFilename="customscript_.xml">
+      <types>
+        <files label="Plug-in - Custom Plug-in Type" bodyFilename="suiteapp_plugintype_ss_2_0.xml"/>
+      </types>
+    </template>
+    <template label="Plug-in - Custom Plug-in Implementation" defaultFilename="customscript_.xml">
+      <types>
+        <files label="Plug-in - Custom Plug-in Implementation" bodyFilename="suiteapp_plugintypeimpl.xml"/>
+      </types>
+    </template>
+    <template label="Plug-in - Email Capture" defaultFilename="customscript_.xml">
+      <types>
+        <files label="Plug-in - Email Capture" bodyFilename="suiteapp_emailcaptureplugin.xml"/>
+      </types>
+    </template>
+    <template label="Plug-in - Promotions" defaultFilename="customscript_.xml">
+      <types>
+        <files label="Plug-in - Promotions" bodyFilename="suiteapp_promotionsplugin.xml"/>
+      </types>
+    </template>
+    <template label="Record Type" defaultFilename="customrecord_.xml">
+      <types>
+        <files label="Record Type" bodyFilename="suiteapp_customrecordtype.xml"/>
+      </types>
+    </template>
+    <template label="Role" defaultFilename="customrole_.xml">
+      <types>
+        <files label="Role" bodyFilename="suiteapp_role.xml"/>
+      </types>
+    </template>
+    <template label="Script - Bundle Installation" defaultFilename="customscript_.xml" nScriptType="BundleInstallationScript">
+      <types>
+        <files label="Script - Bundle Installation" bodyFilename="suiteapp_bundleinstallationscript.xml"/>
+      </types>
+    </template>
+    <template label="Script - Client" defaultFilename="customscript_.xml" nScriptType="ClientScript">
+      <types>
+        <files label="Script - Client" bodyFilename="suiteapp_clientscript.xml"/>
+      </types>
+    </template>
+    <template label="Script - Map/Reduce" defaultFilename="customscript_.xml" nScriptType="MapReduceScript">
+      <types>
+        <files label="Script - Map/Reduce" bodyFilename="suiteapp_mapreducescript.xml"/>
+      </types>
+    </template>
+    <template label="Script - Mass Update" defaultFilename="customscript_.xml" nScriptType="MassUpdateScript">
+      <types>
+        <files label="Script - Mass Update" bodyFilename="suiteapp_massupdatescript.xml"/>
+      </types>
+    </template>
+    <template label="Script - Portlet" defaultFilename="customscript_.xml" nScriptType="Portlet">
+      <types>
+        <files label="Script - Portlet" bodyFilename="suiteapp_portlet.xml"/>
+      </types>
+    </template>
+    <template label="Script - RESTlet" defaultFilename="customscript_.xml" nScriptType="Restlet">
+      <types>
+        <files label="Script - RESTlet" bodyFilename="suiteapp_restlet.xml"/>
+      </types>
+    </template>
+    <template label="Script - Scheduled" defaultFilename="customscript_.xml" nScriptType="ScheduledScript">
+      <types>
+        <files label="Script - Scheduled" bodyFilename="suiteapp_scheduledscript.xml"/>
+      </types>
+    </template>
+    <template label="Script - Suitelet" defaultFilename="customscript_.xml" nScriptType="Suitelet">
+      <types>
+        <files label="Script - Suitelet" bodyFilename="suiteapp_suitelet.xml"/>
+      </types>
+    </template>
+    <template label="Script - User Event" defaultFilename="customscript_.xml" nScriptType="UserEventScript">
+      <types>
+        <files label="Script - User Event" bodyFilename="suiteapp_usereventscript.xml"/>
+      </types>
+    </template>
+    <template label="Script - Workflow Action" defaultFilename="customscript_.xml" nScriptType="workflowactionscript">
+      <types>
+        <files label="Script - Workflow Action" bodyFilename="suiteapp_workflowactionscript.xml"/>
+      </types>
+    </template>
+    <template label="Sublist" defaultFilename="custsublist_.xml">
+      <types>
+        <files label="Sublist" bodyFilename="suiteapp_sublist.xml"/>
+      </types>
+    </template>
+    <template label="Subtab" defaultFilename="custtab_.xml">
+      <types>
+        <files label="Subtab" bodyFilename="suiteapp_subtab.xml"/>
+      </types>
+    </template>
+    <template label="Transaction Body Field" defaultFilename="custbody_.xml">
+      <types>
+        <files label="Transaction Body Field" bodyFilename="suiteapp_transactionbodycustomfield.xml"/>
+      </types>
+    </template>
+    <template label="Transaction Column Field" defaultFilename="custcol_.xml">
+      <types>
+        <files label="Transaction Column Field" bodyFilename="suiteapp_transactioncolumncustomfield.xml"/>
+      </types>
+    </template>
+    <template label="Workflow" defaultFilename="customworkflow_.xml">
+      <types>
+        <files label="Workflow" bodyFilename="suiteapp_workflow.xml"/>
+      </types>
+    </template>
+  </templates>
+</configuration>
+endsnippet
+
+
+snippet suiteapp_plugintypeimpl
+<pluginimplementation scriptid="customscript_">
+    <customplugintype>[]</customplugintype>
+    <isinactive>F</isinactive>
+    <loglevel>DEBUG</loglevel>
+    <name></name>
+    <notifyadmins>F</notifyadmins>
+    <notifyowner>T</notifyowner>
+    <notifyuser>F</notifyuser>
+    <scriptfile>[]</scriptfile>
+    <status>TESTING</status>
+</pluginimplementation>
+endsnippet
+
+
+snippet suiteapp_transactioncolumncustomfield
+<transactioncolumncustomfield scriptid="custcol_">
+    <accesslevel>2</accesslevel>
+    <fieldtype>TEXT</fieldtype>
+    <displaytype>NORMAL</displaytype>
+    <label></label>
+    <storevalue>T</storevalue>
+</transactioncolumncustomfield>
+endsnippet
+
+
+snippet suiteapp_itemcustomfield
+<itemcustomfield scriptid="custitem_">
+    <accesslevel>2</accesslevel>
+    <displaytype>NORMAL</displaytype>
+    <fieldtype>TEXT</fieldtype>
+    <label></label>
+    <searchlevel>2</searchlevel>
+    <storevalue>T</storevalue>
+</itemcustomfield>
+endsnippet
+
+
+snippet suiteapp_workflowactionscript
+<workflowactionscript scriptid="customscript_">
+    <defaultfunction></defaultfunction>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <recordtype></recordtype>
+            <status>TESTING</status>
+        </scriptdeployment>
+    </scriptdeployments>
+</workflowactionscript>
+endsnippet
+
+
+snippet suiteapp_folder
+<folder>
+    <bundleable>F</bundleable>
+    <description></description>
+    <isinactive>F</isinactive>
+    <isprivate>F</isprivate>
+</folder>
+endsnippet
+
+
+snippet RESTlet_get
+/**
+ * @param {Object} dataIn Parameter object
+ * @returns {Object} Output object
+ */
+function getRESTlet(dataIn) {
+	
+	return {};
+}
+endsnippet
+
+
+snippet suiteapp_scriptidchanges
+<scriptidchanges>
+    <scriptidchange projectversion="">
+        <object type="" scriptid="">
+            <change from="" to=""/>
+        </object>
+    </scriptidchange>
+</scriptidchanges>
+endsnippet
+
+
+snippet ss_2_0_blank
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    return {
+        
+    };
+    
+});
+endsnippet
+
+
+snippet suiteapp_subtab
+<subtab scriptid="custtab_">
+    <parent></parent>
+    <tabtype>TRANSACTION</tabtype>
+    <title></title>
+</subtab>
+endsnippet
+
+
+snippet suiteapp_plugintype_ss_2_0
+<plugintype scriptid="customscript_">
+    <deploymentmodel>ALLOW_MULTIPLE</deploymentmodel>
+    <loglevel>DEBUG</loglevel>
+    <name></name>
+    <scriptfile>[]</scriptfile>
+    <status>TESTING</status>
+</plugintype>
+endsnippet
+
+
+snippet suiteapp_othercustomfield
+<othercustomfield scriptid="custrecord_">
+    <accesslevel>2</accesslevel>
+    <displaytype>NORMAL</displaytype>
+    <fieldtype>TEXT</fieldtype>
+    <label></label>
+    <rectype></rectype>
+    <searchlevel>2</searchlevel>
+    <storevalue>T</storevalue>
+</othercustomfield>
+endsnippet
+
+
+snippet client_post_sourcing
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ * 
+ * @param {String} type Sublist internal id
+ * @param {String} name Field internal id
+ * @returns {Void}
+ */
+function clientPostSourcing(type, name) {
+   
+}
+endsnippet
+
+
+snippet suiteapp_mapreducescript
+<mapreducescript scriptid="customscript_">
+    <isinactive>F</isinactive>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <runasrole></runasrole>
+            <status>NOTSCHEDULED</status>
+            <yieldaftermins>60</yieldaftermins>
+        </scriptdeployment>
+    </scriptdeployments>
+</mapreducescript>
+endsnippet
+
+
+snippet suiteapp_itemoptioncustomfield
+<itemoptioncustomfield scriptid="custcol_">
+    <accesslevel>2</accesslevel>
+    <fieldtype>TEXT</fieldtype>
+    <label></label>
+    <storevalue>T</storevalue>
+</itemoptioncustomfield>
+endsnippet
+
+
+snippet bundle_install_before_update
+/**
+ * @param {Number} fromversion
+ * @param {Number} toversion
+ * @returns {Void}
+ */
+function beforeUpdate(fromversion, toversion) {
+ 
+}
+endsnippet
+
+
+snippet suiteapp_customrecordtype
+<customrecordtype scriptid="customrecord_">
+    <allowattachments>T</allowattachments>
+    <allowinlinedetaching>T</allowinlinedetaching>
+    <allowquickadd>T</allowquickadd>
+    <enabledle>T</enabledle>
+    <enablekeywords>T</enablekeywords>
+    <enableoptimisticlocking>T</enableoptimisticlocking>
+    <enablesystemnotes>T</enablesystemnotes>
+    <iconbuiltin>T</iconbuiltin>
+    <includeinsearchmenu>T</includeinsearchmenu>
+    <includename>T</includename>
+    <shownotes>T</shownotes>
+    <recordname></recordname>
+    <customrecordcustomfields>
+        <customrecordcustomfield scriptid="custrecord_">
+            <accesslevel>2</accesslevel>
+            <description></description>
+            <displaytype>NORMAL</displaytype>
+            <fieldtype>TEXT</fieldtype>
+            <label></label>
+            <searchlevel>2</searchlevel>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+    </customrecordcustomfields>
+</customrecordtype>
+endsnippet
+
+
+snippet suiteapp_clientscript
+<clientscript scriptid="customscript_">
+    <isinactive></isinactive>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <recordtype></recordtype>
+            <status>TESTING</status>
+        </scriptdeployment>
+    </scriptdeployments>
+</clientscript>
+endsnippet
+
+
+snippet client_field_changed
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ * 
+ * @param {String} type Sublist internal id
+ * @param {String} name Field internal id
+ * @param {Number} linenum Optional line item number, starts from 1
+ * @returns {Void}
+ */
+function clientFieldChanged(type, name, linenum){
+ 
+}
+endsnippet
+
+
+snippet suiteapp_center
+<center scriptid="custcenter_">
+    <label></label>
+</center>
+endsnippet
+
+
+snippet suiteapp_entitycustomfield
+<entitycustomfield scriptid="custentity_">
+    <accesslevel>2</accesslevel>
+    <displaytype>NORMAL</displaytype>
+    <fieldtype>TEXT</fieldtype>
+    <label></label>
+    <searchlevel>2</searchlevel>
+    <storevalue>T</storevalue>
+</entitycustomfield>
+endsnippet
+
+
+snippet ss_2_0_client
+/**
+ * @NApiVersion 2.x
+ * @NScriptType ClientScript
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+    
+    /**
+     * Function to be executed after page is initialized.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.mode - The mode in which the record is being accessed (create, copy, or edit)
+     *
+     * @since 2015.2
+     */
+    function pageInit(scriptContext) {
+
+    }
+
+    /**
+     * Function to be executed when field is changed.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     * @param {string} scriptContext.fieldId - Field name
+     * @param {number} scriptContext.lineNum - Line number. Will be undefined if not a sublist or matrix field
+     * @param {number} scriptContext.columnNum - Line number. Will be undefined if not a matrix field
+     *
+     * @since 2015.2
+     */
+    function fieldChanged(scriptContext) {
+
+    }
+
+    /**
+     * Function to be executed when field is slaved.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     * @param {string} scriptContext.fieldId - Field name
+     *
+     * @since 2015.2
+     */
+    function postSourcing(scriptContext) {
+
+    }
+
+    /**
+     * Function to be executed after sublist is inserted, removed, or edited.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     *
+     * @since 2015.2
+     */
+    function sublistChanged(scriptContext) {
+
+    }
+
+    /**
+     * Function to be executed after line is selected.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     *
+     * @since 2015.2
+     */
+    function lineInit(scriptContext) {
+
+    }
+
+    /**
+     * Validation function to be executed when field is changed.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     * @param {string} scriptContext.fieldId - Field name
+     * @param {number} scriptContext.lineNum - Line number. Will be undefined if not a sublist or matrix field
+     * @param {number} scriptContext.columnNum - Line number. Will be undefined if not a matrix field
+     *
+     * @returns {boolean} Return true if field is valid
+     *
+     * @since 2015.2
+     */
+    function validateField(scriptContext) {
+
+    }
+
+    /**
+     * Validation function to be executed when sublist line is committed.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     *
+     * @returns {boolean} Return true if sublist line is valid
+     *
+     * @since 2015.2
+     */
+    function validateLine(scriptContext) {
+
+    }
+
+    /**
+     * Validation function to be executed when sublist line is inserted.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     *
+     * @returns {boolean} Return true if sublist line is valid
+     *
+     * @since 2015.2
+     */
+    function validateInsert(scriptContext) {
+
+    }
+
+    /**
+     * Validation function to be executed when record is deleted.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.sublistId - Sublist name
+     *
+     * @returns {boolean} Return true if sublist line is valid
+     *
+     * @since 2015.2
+     */
+    function validateDelete(scriptContext) {
+
+    }
+
+    /**
+     * Validation function to be executed when record is saved.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @returns {boolean} Return true if record is valid
+     *
+     * @since 2015.2
+     */
+    function saveRecord(scriptContext) {
+
+    }
+
+    return {
+        pageInit: pageInit,
+        fieldChanged: fieldChanged,
+        postSourcing: postSourcing,
+        sublistChanged: sublistChanged,
+        lineInit: lineInit,
+        validateField: validateField,
+        validateLine: validateLine,
+        validateInsert: validateInsert,
+        validateDelete: validateDelete,
+        saveRecord: saveRecord
+    };
+    
+});
+endsnippet
+
+
+snippet suiteapp_plugintype
+<plugintype scriptid="customscript_">
+    <class></class>
+    <deploymentmodel>ALLOW_MULTIPLE</deploymentmodel>
+    <loglevel>DEBUG</loglevel>
+    <name></name>
+    <scriptfile>[]</scriptfile>
+    <status>TESTING</status>
+</plugintype>
+endsnippet
+
+
+snippet suiteapp_transactionbodycustomfield
+<transactionbodycustomfield scriptid="custbody_">
+    <accesslevel>2</accesslevel>
+    <displaytype>NORMAL</displaytype>
+    <fieldtype>TEXT</fieldtype>
+    <label></label>
+    <storevalue>T</storevalue>
+</transactionbodycustomfield>
+endsnippet
+
+
+snippet header
+<!--
+  Module Description
+
+  Version    Date            Author           Remarks
+  1.00       ${1:date}     ${2:author}
+//-->
+endsnippet
+
+
+snippet suiteapp_bundleinstallationscript
+<bundleinstallationscript scriptid="customscript_">
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <status>TESTING</status>
+            <title></title>
+        </scriptdeployment>
+    </scriptdeployments>
+</bundleinstallationscript>
+endsnippet
+
+
+snippet ss_2_0_workflow_action
+/**
+ * @NApiVersion 2.x
+ * @NScriptType workflowactionscript
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Definition of the Suitelet script trigger point.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.newRecord - New record
+     * @param {Record} scriptContext.oldRecord - Old record
+     * @Since 2016.1
+     */
+    function onAction(scriptContext) {
+
+    }
+
+    return {
+        onAction : onAction
+    };
+    
+});
+endsnippet
+
+
+snippet suitelet
+/**
+ * @param {nlobjRequest} request Request object
+ * @param {nlobjResponse} response Response object
+ * @returns {Void} Any output is written via response object
+ */
+function suitelet(request, response){
+
+}
+endsnippet
+
+
+snippet suiteapp_deploy_esp
+<deploy>
+    <configuration>
+        <path>~/AccountConfiguration/*</path>
+    </configuration>
+    <files>
+        <path>~/FileCabinet/SuiteScripts/*</path>
+    </files>
+    <objects>
+        <path>~/Objects/*</path>
+    </objects>
+</deploy>
+endsnippet
+
+
+snippet templates
+<configuration>
+  <templates>
+    <template label="Blank Script"  defaultFilename="Script.js" typesControl="radio" headerFilename="header.js" startFilename="blank_start.js" endFilename="blank_end.js" rename="false">
+      <types>
+        <files label="Blank Script" bodyFilename="blank.js" />
+      </types>
+    </template>
+
+    <template label="Bundle Install Script" defaultFilename="BundleInstall.js" typesControl="checkbox" headerFilename="header.js" startFilename="bundle_install_start.js" endFilename="bundle_install_end.js" rename="true">
+      <types>
+        <files trigger="bibi" label="Before Install" bodyFilename="bundle_install_before_install.js" />
+        <files trigger="biai" label="After Install" bodyFilename="bundle_install_after_install.js" />
+        <files trigger="bibu" label="Before Update" bodyFilename="bundle_install_before_update.js" />
+        <files trigger="biau" label="After Update" bodyFilename="bundle_install_after_update.js" />
+        <files trigger="bibun" label="Before Uninstall" bodyFilename="bundle_install_before_uninstall.js" />
+      </types>
+    </template>
+
+    <template label="Client Script" defaultFilename="Client.js" typesControl="checkbox" headerFilename="header.js" startFilename="client_start.js" endFilename="client_end.js" rename="true">
+      <types>
+        <files trigger="cpi" label="Page Init" bodyFilename="client_page_init.js" />
+        <files trigger="csr" label="Save Record" bodyFilename="client_save_record.js" />
+        <files trigger="cvf" label="Validate Field" bodyFilename="client_validate_field.js" />
+        <files trigger="cfc" label="Field Changed" bodyFilename="client_field_changed.js" />
+        <files trigger="cps" label="Post Sourcing" bodyFilename="client_post_sourcing.js" />
+        <files trigger="cli" label="Line Init" bodyFilename="client_line_init.js" />
+        <files trigger="cvl" label="Validate Line" bodyFilename="client_validate_line.js" />
+        <files trigger="cr" label="Recalc" bodyFilename="client_recalc.js" />
+        <files trigger="cvi" label="Validate Insert" bodyFilename="client_validate_insert.js" />
+        <files trigger="cvd" label="Validate Delete" bodyFilename="client_validate_delete.js" />
+      </types>
+    </template>
+
+    <template label="Mass Update Script"  defaultFilename="MassUpdate.js" typesControl="radio" headerFilename="header.js" startFilename="mass_update_start.js" endFilename="mass_update_end.js" rename="true">
+      <types>
+        <files label="Mass Update" bodyFilename="mass_update.js" />
+      </types>
+    </template>
+
+    <template label="Portlet"  defaultFilename="Portlet.js" typesControl="radio" headerFilename="header.js" startFilename="portlet_start.js" endFilename="portlet_end.js" rename="true">
+      <types>
+        <files label="Portlet" bodyFilename="portlet.js" />
+      </types>
+    </template>
+
+    <template label="RESTlet"  defaultFilename="RESTlet.js" typesControl="checkbox" headerFilename="header.js" startFilename="RESTlet_start.js" endFilename="RESTlet_end.js" rename="true">
+      <types>
+        <files trigger="rg" label="Get" bodyFilename="RESTlet_get.js" />
+        <files trigger="rp" label="Post" bodyFilename="RESTlet_post.js" />
+        <files trigger="rd" label="Delete" bodyFilename="RESTlet_delete.js" />
+        <files trigger="rpu" label="Put" bodyFilename="RESTlet_put.js" />
+      </types>
+    </template>
+
+    <template label="Scheduled Script" defaultFilename="ScheduledScript.js" typesControl="radio" headerFilename="header.js" startFilename="scheduled_start.js" endFilename="scheduled_end.js" rename="true">
+      <types>
+        <files label="Scheduled" bodyFilename="scheduled.js" />
+      </types>
+    </template>
+
+    <template label="SSP Application: .ss file" defaultFilename="Script.ss" typesControl="radio" headerFilename="header.js" startFilename="ssp_start.ss" endFilename="ssp_end.ss" rename="true">
+      <types>
+        <files label="SuiteScript Server File" bodyFilename="ssp.ss" />
+      </types>
+    </template>
+
+    <template label="SSP Application: .ssp file" defaultFilename="Script.ssp" typesControl="radio" headerFilename="header.ssp" startFilename="ssp_start.ssp" endFilename="ssp_end.ssp" rename="false">
+      <types>
+        <files label="SuiteScript Server Pages" bodyFilename="ssp.ssp" />
+      </types>
+    </template>
+
+    <template label="Suitelet Script"  defaultFilename="Suitelet.js" typesControl="radio" headerFilename="header.js" startFilename="suitelet_start.js" endFilename="suitelet_end.js" rename="true">
+      <types>
+        <files label="Suitelet" bodyFilename="suitelet.js" />
+      </types>
+    </template>
+
+    <template label="User Event Script" defaultFilename="UserEvent.js" typesControl="checkbox" headerFilename="header.js" startFilename="user_event_start.js" endFilename="user_event_end.js" rename="true">
+      <types>
+        <files trigger="uebl" label="Before Load" bodyFilename="user_event_before_load.js" />
+        <files trigger="uebs" label="Before Submit" bodyFilename="user_event_before_submit.js" />
+        <files trigger="ueas" label="After Submit" bodyFilename="user_event_after_submit.js" />
+      </types>
+    </template>
+
+    <template label="Workflow Action Script" defaultFilename="WorkflowAction.js" typesControl="radio" headerFilename="header.js" startFilename="workflow_action_start.js" endFilename="workflow_action_end.js" rename="true">
+      <types>
+        <files label="Workflow Action" bodyFilename="workflow_action.js" />
+      </types>
+    </template>
+
+  </templates>
+</configuration>
+endsnippet
+
+
+snippet client_validate_insert
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @param {String} type Sublist internal id
+ * @returns {Boolean} True to continue line item insert, false to abort insert
+ */
+function clientValidateInsert(type){
+  
+    return true;
+}
+endsnippet
+
+
+snippet RESTlet_delete
+/**
+ * @param {Object} dataIn Parameter object
+ * @returns {Void} 
+ */
+function deleteRESTlet(dataIn) {
+	
+}
+endsnippet
+
+
+snippet ss_2_0_bundle_installation
+/**
+ * @NApiVersion 2.x
+ * @NScriptType BundleInstallationScript
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Executes after a bundle is installed for the first time in a target account.
+     *
+     * @param {Object} params
+     * @param {number} params.version - Version of the bundle being installed
+     *
+     * @since 2016.1
+     */
+    function beforeInstall(params) {
+
+    }
+
+    /**
+     * Executes after a bundle in a target account is updated.
+     *
+     * @param {Object} params
+     * @param {number} params.version - Version of the bundle being installed
+     *
+     * @since 2016.1
+     */
+    function afterInstall(params) {
+
+    }
+
+    /**
+     * Executes before a bundle is installed for the first time in a target account.
+     *
+     * @param {Object} params
+     * @param {number} params.fromVersion - Version currently installed
+     * @param {number} params.toVersion -  New version of the bundle being installed
+     *
+     * @since 2016.1
+     */
+    function beforeUpdate(params) {
+
+    }
+
+    /**
+     * Executes before a bundle is uninstalled from a target account.
+     *
+     * @param {Object} params
+     * @param {number} params.fromVersion - Version currently installed
+     * @param {number} params.toVersion -  New version of the bundle being installed
+     *
+     * @since 2016.1
+     */
+    function afterUpdate(params) {
+
+    }
+
+    /**
+     * Executes before a bundle in a target account is updated.
+     *
+     * @param {Object} params
+     * @param {number} params.version - Version of the bundle being unistalled
+     *
+     * @since 2016.1
+     */
+    function beforeUninstsall(params) {
+
+    }
+    
+    return {
+        beforeInstall: beforeInstall,
+        afterInstall: afterInstall,
+        beforeUpdate: beforeUpdate,
+        afterUpdate: afterUpdate,
+        beforeUninstall: beforeUninstsall
+    };
+    
+});
+endsnippet
+
+
+snippet ss_2_0_mass_update
+/**
+ * @NApiVersion 2.x
+ * @NScriptType MassUpdateScript
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+    
+    /**
+     * Definition of Mass Update trigger point.
+     *
+     * @param {Object} params
+     * @param {string} params.type - Record type of the record being processed by the mass update
+     * @param {number} params.id - ID of the record being processed by the mass update
+     *
+     * @since 2016.1
+     */
+    function each(params) {
+
+    }
+
+    return {
+        each: each
+    };
+    
+});
+endsnippet
+
+
+snippet ss_2_0_scheduled
+/**
+ * @NApiVersion 2.x
+ * @NScriptType ScheduledScript
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Definition of the Scheduled script trigger point.
+     *
+     * @param {Object} scriptContext
+     * @param {string} scriptContext.type - The context in which the script is executed. It is one of the values from the scriptContext.InvocationType enum.
+     * @Since 2015.2
+     */
+    function execute(scriptContext) {
+
+    }
+
+    return {
+        execute: execute
+    };
+    
+});
+endsnippet
+
+
+snippet suiteapp_file
+<file>
+    <bundleable>F</bundleable>
+    <description></description>
+    <isinactive>F</isinactive>
+    <hideinbundle>F</hideinbundle>
+</file>
+endsnippet
+
+
+snippet suiteapp_manifest_suiteapp
+<manifest projecttype="SUITEAPP">
+    <publisherid></publisherid>
+    <projectid></projectid>
+    <projectname></projectname>
+    <projectversion></projectversion>
+    <frameworkversion></frameworkversion>
+</manifest>
+endsnippet
+
+
+snippet user_event_before_submit
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ * 
+ * @param {String} type Operation types: create, edit, delete, xedit
+ *                      approve, reject, cancel (SO, ER, Time Bill, PO & RMA only)
+ *                      pack, ship (IF)
+ *                      markcomplete (Call, Task)
+ *                      reassign (Case)
+ *                      editforecast (Opp, Estimate)
+ * @returns {Void}
+ */
+function userEventBeforeSubmit(type){
+ 
+}
+endsnippet
+
+
+snippet client_validate_line
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @param {String} type Sublist internal id
+ * @returns {Boolean} True to save line item, false to abort save
+ */
+function clientValidateLine(type){
+ 
+    return true;
+}
+endsnippet
+
+
+snippet bundle_install_before_uninstall
+/**
+ * @returns {Void}
+ */
+function beforeUninstall() {
+ 
+}
+endsnippet
+
+
+snippet suiteapp_restlet
+<restlet scriptid="customscript_">
+    <isinactive></isinactive>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <status>TESTING</status>
+            <title></title>
+        </scriptdeployment>
+    </scriptdeployments>
+</restlet>
+endsnippet
+
+
+snippet ss_2_0_restlet
+/**
+ * @NApiVersion 2.x
+ * @NScriptType Restlet
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Function called upon sending a GET request to the RESTlet.
+     *
+     * @param {Object} requestParams - Parameters from HTTP request URL; parameters will be passed into function as an Object (for all supported content types)
+     * @returns {string | Object} HTTP response body; return string when request Content-Type is 'text/plain'; return Object when request Content-Type is 'application/json'
+     * @since 2015.1
+     */
+    function doGet(requestParams) {
+
+    }
+
+    /**
+     * Function called upon sending a PUT request to the RESTlet.
+     *
+     * @param {string | Object} requestBody - The HTTP request body; request body will be passed into function as a string when request Content-Type is 'text/plain'
+     * or parsed into an Object when request Content-Type is 'application/json' (in which case the body must be a valid JSON)
+     * @returns {string | Object} HTTP response body; return string when request Content-Type is 'text/plain'; return Object when request Content-Type is 'application/json'
+     * @since 2015.2
+     */
+    function doPut(requestBody) {
+
+    }
+
+
+    /**
+     * Function called upon sending a POST request to the RESTlet.
+     *
+     * @param {string | Object} requestBody - The HTTP request body; request body will be passed into function as a string when request Content-Type is 'text/plain'
+     * or parsed into an Object when request Content-Type is 'application/json' (in which case the body must be a valid JSON)
+     * @returns {string | Object} HTTP response body; return string when request Content-Type is 'text/plain'; return Object when request Content-Type is 'application/json'
+     * @since 2015.2
+     */
+    function doPost(requestBody) {
+
+    }
+
+    /**
+     * Function called upon sending a DELETE request to the RESTlet.
+     *
+     * @param {Object} requestParams - Parameters from HTTP request URL; parameters will be passed into function as an Object (for all supported content types)
+     * @returns {string | Object} HTTP response body; return string when request Content-Type is 'text/plain'; return Object when request Content-Type is 'application/json'
+     * @since 2015.2
+     */
+    function doDelete(requestParams) {
+
+    }
+
+    return {
+        'get': doGet,
+        put: doPut,
+        post: doPost,
+        'delete': doDelete
+    };
+    
+});
+endsnippet
+
+
+snippet bundle_install_after_install
+/**
+ * @param {Number} toversion
+ * @returns {Void}
+ */
+function afterInstall(toversion) {
+  
+}
+endsnippet
+
+
+snippet suiteapp_centercategory
+<centercategory scriptid="custcentercategory_">
+    <center></center>
+    <centertab></centertab>
+    <label></label>
+</centercategory>
+endsnippet
+
+
+snippet suiteapp_itemnumbercustomfield
+<itemnumbercustomfield scriptid="custitemnumber_">
+    <accesslevel>2</accesslevel>
+    <appliestoallitems>F</appliestoallitems>
+    <displaytype>NORMAL</displaytype>
+    <fieldtype>TEXT</fieldtype>
+    <label></label>
+    <searchlevel>2</searchlevel>
+    <storevalue>T</storevalue>
+</itemnumbercustomfield>
+endsnippet
+
+
+snippet ss_2_0_templates
+<configuration>
+  <templates>
+    <template label="Blank Script" defaultFilename="Script.js" typesControl="radio" headerFilename="ss_2_0_header.js" startFilename="blank_start.js" endFilename="blank_end.js">
+      <types>
+        <files label="Blank Script" bodyFilename="ss_2_0_blank.js" />
+      </types>
+    </template>
+
+    <template label="Bundle Installation Script" defaultFilename="BundleInstallationScript.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Bundle Installation Script" bodyFilename="ss_2_0_bundle_installation.js" />
+      </types>
+    </template>
+
+    <template label="Client Script" defaultFilename="ClientScript.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Client Script" bodyFilename="ss_2_0_client.js" />
+      </types>
+    </template>
+    
+    <template label="Custom Plug-in" defaultFilename="CustomPlugin.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Custom Plug-in" bodyFilename="ss_2_0_plugin_impl.js" />
+      </types>
+    </template>
+
+    <template label="Map/Reduce Script" defaultFilename="MapReduceScript.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Map/Reduce Script" bodyFilename="ss_2_0_map_reduce.js" />
+      </types>
+    </template>
+    
+    <template label="Mass Update Script" defaultFilename="MassUpdateScript.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Mass Update Script" bodyFilename="ss_2_0_mass_update.js" />
+      </types>
+    </template>
+
+    <template label="Portlet" defaultFilename="Portlet.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Portlet" bodyFilename="ss_2_0_portlet.js" />
+      </types>
+    </template>
+
+    <template label="RESTlet" defaultFilename="RESTlet.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="RESTlet" bodyFilename="ss_2_0_restlet.js" />
+      </types>
+    </template>
+
+    <template label="Scheduled Script" defaultFilename="ScheduledScript.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Scheduled Script" bodyFilename="ss_2_0_scheduled.js" />
+      </types>
+    </template>
+
+    <template label="Suitelet" defaultFilename="Suitelet.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Suitelet" bodyFilename="ss_2_0_suitelet.js" />
+      </types>
+    </template>
+
+    <template label="User Event Script" defaultFilename="UserEventScript.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="User Event Script" bodyFilename="ss_2_0_user_event.js" />
+      </types>
+    </template>
+    
+    <template label="Workflow Action Script" defaultFilename="WorkflowActionScript.js" headerFilename="ss_2_0_header.js">
+      <types>
+        <files label="Workflow Action Script" bodyFilename="ss_2_0_workflow_action.js" />
+      </types>
+    </template>
+
+  </templates>
+</configuration>
+endsnippet
+
+
+snippet suiteapp_patches
+<patches>
+    <!-- <patch from="version no. - e.g. 1.4.0" file="path of the deploy file - e.g., /folder1/deploy.xml"/> -->
+    <patch from="" file=""/>
+</patches>
+endsnippet
+
+
+snippet RESTlet_post
+/**
+ * @param {Object} dataIn Parameter object
+ * @returns {Object} Output object
+ */
+function postRESTlet(dataIn) {
+	
+	return {};
+}
+endsnippet
+
+
+snippet client_validate_field
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @param {String} type Sublist internal id
+ * @param {String} name Field internal id
+ * @param {Number} linenum Optional line item number, starts from 1
+ * @returns {Boolean} True to continue changing field value, false to abort value change
+ */
+function clientValidateField(type, name, linenum){
+   
+    return true;
+}
+endsnippet
+
+
+snippet suiteapp_form
+<form scriptid="custform_">
+	<name></name>
+	<recordtype></recordtype>
+	<editableinlist>T</editableinlist>
+	<preferred>T</preferred>
+</form>
+endsnippet
+
+
+snippet suiteapp_manifest_esp
+<manifest projecttype="ACCOUNTCUSTOMIZATION">
+    <projectname></projectname>
+    <frameworkversion></frameworkversion>
+</manifest>
+endsnippet
+
+
+snippet suiteapp_customlist
+<customlist scriptid="customlist_">
+    <isordered>T</isordered>
+    <name></name>
+    <customvalues>
+        <customvalue scriptid="">
+            <value></value>
+        </customvalue>
+    </customvalues>
+</customlist>
+endsnippet
+
+
+snippet suiteapp_workflow
+<workflow scriptid="customworkflow_">
+    <name></name>
+    <recordtypes></recordtypes>
+    <releasestatus>NOTRUNNING</releasestatus>
+    <workflowstates>
+        <workflowstate scriptid="workflowstate_">
+            <name></name>
+            <positionx>50</positionx>
+            <positiony>110</positiony>
+        </workflowstate>
+    </workflowstates>
+</workflow>
+endsnippet
+
+
+snippet workflow_action
+/**
+ * @returns {Void} Any or no return value
+ */
+function workflowAction() {
+
+}
+endsnippet
+
+
+snippet suiteapp_centertab
+<centertab scriptid="custcentertab_">
+    <allroles>T</allroles>
+    <center></center>
+    <label></label>
+    <portlets>
+        <portlet scriptid="">
+            <portlet></portlet>
+            <portletcolumn>1</portletcolumn>
+            <isportletshown>T</isportletshown>
+        </portlet>
+    </portlets>
+</centertab>
+endsnippet
+
+
+snippet suiteapp_suitelet
+<suitelet scriptid="customscript_">
+    <defaultfunction></defaultfunction>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <status>TESTING</status>
+            <title></title>
+        </scriptdeployment>
+    </scriptdeployments>
+</suitelet>
+endsnippet
+
+
+snippet RESTlet_put
+/**
+ * @param {Object} dataIn Parameter object
+ * @returns {Object} Output object 
+ */
+function putRESTlet(dataIn) {
+	
+	return {};
+}
+endsnippet
+
+
+snippet client_page_init
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType 
+ * 
+ * @param {String} type Access mode: create, copy, edit
+ * @returns {Void}
+ */
+function clientPageInit(type){
+   
+}
+endsnippet
+
+
+snippet suiteapp_sublist
+<sublist scriptid="custsublist_">
+    <label></label>
+    <savedsearch>[]</savedsearch>
+    <sublisttype></sublisttype>
+    <tab>[]</tab>
+</sublist>
+endsnippet
+
+
+snippet mass_update
+/**
+ * @param {String} recType Record type internal id
+ * @param {Number} recId Record internal id
+ * @returns {Void}
+ */
+function massUpdate(recType, recId) {
+
+}
+endsnippet
+
+
+snippet client_recalc
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @param {String} type Sublist internal id
+ * @returns {Void}
+ */
+function clientRecalc(type){
+ 
+}
+endsnippet
+
+
+snippet suiteapp_massupdatescript
+<massupdatescript scriptid="customscript_">
+    <defaultfunction></defaultfunction>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <recordtype></recordtype>
+            <status>TESTING</status>
+        </scriptdeployment>
+    </scriptdeployments>
+</massupdatescript>
+endsnippet
+
+
+snippet user_event_before_load
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @param {String} type Operation types: create, edit, view, copy, print, email
+ * @param {nlobjForm} form Current form
+ * @param {nlobjRequest} request Request object
+ * @returns {Void}
+ */
+function userEventBeforeLoad(type, form, request){
+ 
+}
+endsnippet
+
+
+snippet ss_2_0_header
+endsnippet
+
+
+snippet suiteapp_customglplugin
+<customglplugin scriptid="customscript_">
+    <loglevel>DEBUG</loglevel>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <status>TESTING</status>
+</customglplugin>
+endsnippet
+
+
+snippet ss_2_0_map_reduce
+/**
+ * @NApiVersion 2.x
+ * @NScriptType MapReduceScript
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Marks the beginning of the Map/Reduce process and generates input data.
+     *
+     * @typedef {Object} ObjectRef
+     * @property {number} id - Internal ID of the record instance
+     * @property {string} type - Record type id
+     *
+     * @return {Array|Object|Search|RecordRef} inputSummary
+     * @since 2015.1
+     */
+    function getInputData() {
+
+    }
+
+    /**
+     * Executes when the map entry point is triggered and applies to each key/value pair.
+     *
+     * @param {MapSummary} context - Data collection containing the key/value pairs to process through the map stage
+     * @since 2015.1
+     */
+    function map(context) {
+
+    }
+
+    /**
+     * Executes when the reduce entry point is triggered and applies to each group.
+     *
+     * @param {ReduceSummary} context - Data collection containing the groups to process through the reduce stage
+     * @since 2015.1
+     */
+    function reduce(context) {
+
+    }
+
+
+    /**
+     * Executes when the summarize entry point is triggered and applies to the result set.
+     *
+     * @param {Summary} summary - Holds statistics regarding the execution of a map/reduce script
+     * @since 2015.1
+     */
+    function summarize(summary) {
+
+    }
+
+    return {
+        getInputData: getInputData,
+        map: map,
+        reduce: reduce,
+        summarize: summarize
+    };
+    
+});
+endsnippet
+
+
+snippet suiteapp_emailcaptureplugin
+<emailcaptureplugin scriptid="customscript_">
+    <loglevel>DEBUG</loglevel>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <runasrole></runasrole>
+    <scriptfile>[]</scriptfile>
+    <status>TESTING</status>
+</emailcaptureplugin>
+endsnippet
+
+
+snippet bundle_install_after_update
+/**
+ * @param {Number} fromversion
+ * @param {Number} toversion
+ * @returns {Void}
+ */
+function afterUpdate(fromversion, toversion) {
+  
+}
+endsnippet
+
+
+snippet ss_2_0_user_event
+/**
+ * @NApiVersion 2.x
+ * @NScriptType UserEventScript
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Function definition to be triggered before record is loaded.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.newRecord - New record
+     * @param {string} scriptContext.type - Trigger type
+     * @param {Form} scriptContext.form - Current form
+     * @Since 2015.2
+     */
+    function beforeLoad(scriptContext) {
+
+    }
+
+    /**
+     * Function definition to be triggered before record is loaded.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.newRecord - New record
+     * @param {Record} scriptContext.oldRecord - Old record
+     * @param {string} scriptContext.type - Trigger type
+     * @Since 2015.2
+     */
+    function beforeSubmit(scriptContext) {
+
+    }
+
+    /**
+     * Function definition to be triggered before record is loaded.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.newRecord - New record
+     * @param {Record} scriptContext.oldRecord - Old record
+     * @param {string} scriptContext.type - Trigger type
+     * @Since 2015.2
+     */
+    function afterSubmit(scriptContext) {
+
+    }
+
+    return {
+        beforeLoad: beforeLoad,
+        beforeSubmit: beforeSubmit,
+        afterSubmit: afterSubmit
+    };
+    
+});
+endsnippet
+
+
+snippet ss_2_0_portlet
+/**
+ * @NApiVersion 2.x
+ * @NScriptType Portlet
+ * @NModuleScope SameAccount
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    /**
+     * Definition of the Portlet script trigger point.
+     * 
+     * @param {Object} params
+     * @param {Portlet} params.portlet - The portlet object used for rendering
+     * @param {number} params.column - Specifies whether portlet is placed in left (1), center (2) or right (3) column of the dashboard
+     * @param {string} params.entity - (For custom portlets only) references the customer ID for the selected customer
+     * @Since 2015.2
+     */
+    function render(params) {
+
+    }
+
+    return {
+        render: render
+    };
+    
+});
+endsnippet
+
+
+snippet suiteapp_portlet
+<portlet scriptid="customscript_">
+    <defaultfunction></defaultfunction>
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <portlettype></portlettype>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <status>TESTING</status>
+            <title></title>
+        </scriptdeployment>
+    </scriptdeployments>
+</portlet>
+endsnippet
+
+
+snippet client_save_record
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @returns {Boolean} True to continue save, false to abort save
+ */
+function clientSaveRecord(){
+
+    return true;
+}
+endsnippet
+
+
+snippet suiteapp_role
+<role scriptid="customrole_">
+    <centertype></centertype>
+    <name></name>
+</role>
+endsnippet
+
+
+snippet ss_2_0_plugin_impl
+/**
+ * @NApiVersion 2.x
+ * @NScriptType plugintypeimpl
+ */
+define([${1:modules}],
+${2:modulesJsDoc}
+function(${3:moduleParameters}) {
+   
+    return {
+        
+    };
+    
+});
+endsnippet
+
+
+snippet suiteapp_usereventscript
+<usereventscript scriptid="customscript_">
+    <name></name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <recordtype></recordtype>
+            <status>TESTING</status>
+        </scriptdeployment>
+    </scriptdeployments>
+</usereventscript>
+endsnippet
+
+
+snippet bundle_install_before_install
+/**
+ * @param {Number} toversion
+ * @returns {Void}
+ */
+function beforeInstall(toversion) {
+  
+}
+endsnippet
+
+
+snippet client_validate_delete
+/**
+ * The recordType (internal id) corresponds to the "Applied To" record in your script deployment. 
+ * @appliedtorecord recordType
+ *   
+ * @param {String} type Sublist internal id
+ * @returns {Boolean} True to continue line item delete, false to abort delete
+ */
+function clientValidateDelete(type){
+   
+    return true;
+}
+endsnippet
+
+
+snippet suiteapp_deploy_suiteapp
+<deploy>
+    <files>
+        <path>~/FileCabinet/SuiteApps/${1:applicationId}/*</path>
+    </files>
+    <objects>
+        <path>~/Objects/*</path>
+    </objects>
+</deploy>
+endsnippet
+

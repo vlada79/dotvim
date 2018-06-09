@@ -123,6 +123,7 @@ highlight SignColumn guibg=#0D1B1B
 highlight User1         gui=none guibg=black guifg=lightyellow
 highlight User2         gui=none guibg=black guifg=darkgray
 highlight User3         gui=none guibg=black guifg=cyan
+highlight User4         gui=none guibg=black guifg=seagreen3
 
 
 " vim: sw=4 ts=4 et

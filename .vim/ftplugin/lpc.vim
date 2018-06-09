@@ -479,6 +479,7 @@ endfunction
 " Load dependencies file
 " (needed for completition)
 let g:lpc_home = '/home/vlada/genesis/mud/'
+let g:lpc_ftp = 'ftp://genesismud.org:1822/'
 call LpcLoadDependencies() 
 
 " Autocomplete
@@ -497,6 +498,20 @@ command! -buffer -nargs=+ -complete=tag Sman vimgrep /<args>/j ~/genesis/mud/lib
 command! -buffer -nargs=+ -complete=tag Mudlib vimgrep /<args>/j ~/genesis/mud/lib/**/* | cw
 command! -buffer -nargs=+ -complete=tag Code vimgrep /<args>/j ~/genesis/mud/lib/w/zilmop/**/* | cw
 command! -buffer -nargs=+ -complete=tag Fn ilist /^\S*<args>\S*(/
+
+" Genesis commands
+if !exists("*ToggleHelp")
+  function! FtpWrite()
+    let path = expand("%:p")
+    let path = substitute(path, g:lpc_home . 'lib/' , '', '')
+    let ftp_url = g:lpc_ftp . '/' . path
+    execute 'write'
+    silent execute 'NWrite ' . ftp_url
+    echomsg "Doing Ftp write for " . ftp_url
+  endfunction
+endif
+
+command! -buffer Genwrite :call FtpWrite()
 
 function! LpcBufferSave(timerid)
   silent! Neomake!

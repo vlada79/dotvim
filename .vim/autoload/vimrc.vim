@@ -36,4 +36,48 @@ function! VimwikiLinkHandler(link)
 endfunction
 
 
+" Rename identifier in file
+" {{{
+nnoremap <Leader>r :call <SID>RenameIdentifierInFile()<CR>
+
+" Function:    s:RenameIdentifierInFile
+" Description: Substitute word under cursor with another in whole file
+function! s:RenameIdentifierInFile()
+  let name = expand('<cword>')
+  let newName = input('Rename ' . l:name . ' to: ')
+
+  if l:newName == ""
+    return
+  endif
+
+  execute '%substitute/\C\<' . l:name . '\>/' . l:newName . '/g'
+endfunction
+" }}}
+
+" Nessie helpers (generic)
+" {{{
+nnoremap <silent> <Leader>u :call <SID>AsyncNetsuiteUpload()<CR>
+command! NetsuiteUpload :call <SID>AsyncNetsuiteUpload()
+
+" Function:    s:AsyncNetsuiteUpload
+" Description: Upload file to netsuite
+function! s:AsyncNetsuiteUpload()
+  write
+  if exists("b:nessie_linter")
+    execute b:nessie_linter
+
+    if len(getqflist()) > 0
+      cwindow
+      return
+    endif
+  endif
+
+  let nessie_cmd = 'nessie upload %:p --client'
+  let post_cmd = "echom\\ \'Script\\ upload\\ complete.\'"
+  "let post_cmd = fnameescape(l:post_cmd)
+  execute 'AsyncRun -post=' . l:post_cmd . ' ' . l:nessie_cmd
+endfunction
+" }}}
+
+" vim: foldmethod=marker
 

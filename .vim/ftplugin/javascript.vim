@@ -144,7 +144,7 @@ function! FindReferencesInProject(word)
     let l:dir = substitute(l:dir, '\Cdapper.*$', 'dapper/*.js', '')
     silent! execute 'noautocmd vimgrep ' . '/\C\<' . a:word . '\>/j' . ' ' . l:dir
     let l:dir = substitute(l:dir, '\Cdapper.*$', 'dapper/app/**/*.js', '')
-    silent! execute 'noautocmd vimgrep ' . '/\C\<' . a:word . '\>/j' . ' ' . l:dir
+    silent! execute 'noautocmd vimgrepadd ' . '/\C\<' . a:word . '\>/j' . ' ' . l:dir
     let l:dir = substitute(l:dir, '\Cdapper.*$', 'dapper/config/**/*.js', '')
     silent! execute 'noautocmd vimgrepadd ' . '/\C\<' . a:word . '\>/j' . ' ' . l:dir
     let l:dir = substitute(l:dir, '\Cdapper.*$', 'dapper/env/**/*.json', '')

@@ -17,18 +17,22 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-speeddating'
-
-" Need some time to look into sessions 
-"Plugin 'tpope/vim-obsession' 
+Plugin 'tpope/vim-obsession' 
 
 " Autoformat
 Plugin 'Chiel92/vim-autoformat'
+
+" Diffs
+Plugin 'chrisbra/vim-diff-enhanced'
 
 " CSV support
 Plugin 'chrisbra/csv.vim'
 
 "Plugin 'duff/vim-bufonly'
 Plugin 'neomake/neomake'
+
+" Undo visualisation
+Plugin 'sjl/gundo.vim'
 
 " Ruby powertools
 Plugin 'vim-ruby/vim-ruby'
@@ -186,6 +190,9 @@ set mouse=a
 set dictionary=/usr/share/dict/words
 set thesaurus=~/.vim/thesaurus/mthesaur.txt
 
+set undofile
+set undodir=~/.vim/undodir
+
 syntax on
 colorscheme lovecraft
 
@@ -270,6 +277,10 @@ let g:UltiSnipsExpandTrigger       = "<tab>"
 let g:UltiSnipsListSnippets        = "<c-tab>"
 let g:UltiSnipsJumpForwardTrigger  = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" Gundo setup
+let g:gundo_prefer_python3 = 1
+nnoremap <Leader>` :GundoToggle<CR>
 
 " Quickfixsign config
 set signcolumn=auto

@@ -59,6 +59,10 @@ endfunction
 nnoremap <silent> <Leader>u :call <SID>AsyncNetsuiteUpload()<CR>
 command! NetsuiteUpload :call <SID>AsyncNetsuiteUpload()
 
+nnoremap <silent> <Leader>d :call <SID>NetsuiteDiff()<CR>
+command! NetsuiteDiff :call <SID>NetsuiteDiff()
+
+
 " Function:    s:AsyncNetsuiteUpload
 " Description: Upload file to netsuite
 function! s:AsyncNetsuiteUpload()
@@ -76,6 +80,31 @@ function! s:AsyncNetsuiteUpload()
   let post_cmd = "echom\\ \'Script\\ upload\\ complete.\'"
   "let post_cmd = fnameescape(l:post_cmd)
   execute 'AsyncRun -post=' . l:post_cmd . ' ' . l:nessie_cmd
+endfunction
+
+" Function:    s:NetsuiteDiff
+" Description: Diff current file to with netsuite
+function! s:NetsuiteDiff()
+  if &diff
+    bufdo diffoff
+    windo diffoff
+    return
+  endif
+
+  let current_path = expand('%:p')
+  split NetSuiteDiff
+  edit NetSuiteDiff
+
+  silent execute '0,$d'
+  silent execute '0r! nessie cat' shellescape(l:current_path, 1)
+  silent execute '$d'
+
+  bufdo diffoff
+  windo diffoff
+
+  diffthis
+  wincmd p
+  diffthis
 endfunction
 " }}}
 
